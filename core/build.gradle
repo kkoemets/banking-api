@@ -27,3 +27,20 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+
+sourceSets {
+    integrationTest {
+        java {
+            srcDirs 'src/integration-test/java'
+            compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
+        }
+        resources.srcDir 'src/integration-test/resources'
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom implementation
+    integrationTestImplementation.extendsFrom testImplementation
+}
