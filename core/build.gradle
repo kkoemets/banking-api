@@ -4,8 +4,9 @@ plugins {
     id 'java'
 }
 
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 sourceCompatibility = '18'
+group = 'com.kkoemets'
 
 repositories {
     mavenCentral()
@@ -16,8 +17,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
-    runtimeOnly 'org.postgresql:postgresql'
+    implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:$MYBATIS_VERSION"
+    runtimeOnly "org.postgresql:postgresql:$POSTGRES_VERSION"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
     testImplementation 'org.springframework.security:spring-security-test'
