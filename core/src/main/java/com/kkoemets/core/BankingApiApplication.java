@@ -1,4 +1,4 @@
-package com.kkoemets.bankingapi;
+package com.kkoemets.core;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
