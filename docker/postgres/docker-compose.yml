@@ -1,0 +1,26 @@
+version: "3.1"
+
+services:
+  banking-api-db:
+    container_name: banking-api-db
+    image: postgres:13.2-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    networks:
+      - banking-api-net
+  banking-api-liquibase:
+    depends_on:
+      - banking-api-db
+    container_name: banking-api-liquibase
+    image: liquibase/liquibase:4.16
+    volumes:
+      - ./changelog.xml:/liquibase/changelog.xml
+      - ./sql:/liquibase/sql
+    networks:
+      - banking-api-net
+    command: liquibase update --changeLogFile=changelog.xml --url="jdbc:postgresql://banking-api-db:5432/postgres?user=postgres&password=postgres"
+networks:
+  banking-api-net:
