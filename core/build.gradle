@@ -14,9 +14,11 @@ repositories {
 }
 
 dependencies {
+    implementation project(':domain')
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation "com.zaxxer:HikariCP:$HIKARI_VERSION"
     implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:$MYBATIS_VERSION"
     runtimeOnly "org.postgresql:postgresql:$POSTGRES_VERSION"
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

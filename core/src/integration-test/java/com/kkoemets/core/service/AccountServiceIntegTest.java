@@ -15,4 +15,9 @@ public class AccountServiceIntegTest extends CoreIntegTest {
         service.add();
     }
 
+    @Test
+    public void shouldReturnAccountId() {
+        throw new UnsupportedOperationException();
+    }
+
 }
