@@ -7,3 +7,4 @@ pluginManagement {
 rootProject.name = 'banking-api'
 include 'core'
 include 'domain'
+include 'account-api'
