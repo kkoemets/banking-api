@@ -8,9 +8,9 @@ CREATE TABLE core.account
 (
     acco_id        BIGINT                   NOT NULL,
     cust_id        BIGINT                   NOT NULL,
-    iban           VARCHAR(34)              NOT NULL,
-    inserted_dtime TIMESTAMP WITH TIME ZONE NOT NULL,
-    status_code    VARCHAR(1)               NOT NULL
+    status_code    VARCHAR(1)               NOT NULL,
+    country        VARCHAR(2)               NOT NULL,
+    inserted_dtime TIMESTAMP WITH TIME ZONE NOT NULL
 );
 
 CREATE SEQUENCE core.acco_seq AS

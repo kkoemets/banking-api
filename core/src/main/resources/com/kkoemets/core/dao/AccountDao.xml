@@ -7,4 +7,15 @@
         SELECT NEXTVAL('core.acco_seq');
     </select>
 
+    <insert id="add">
+        INSERT INTO core.account (acco_id, cust_id, status_code, country, inserted_dtime)
+        VALUES (#{dto.accountId}, #{dto.customerId}, #{status}, #{dto.country}, CURRENT_TIMESTAMP)
+    </insert>
+
+    <insert id="exists">
+        SELECT COUNT(*) > 0
+        FROM core.account
+        WHERE acco_id = #{accountId}
+    </insert>
+
 </mapper>
