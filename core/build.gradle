@@ -45,4 +45,5 @@ sourceSets {
 configurations {
     integrationTestImplementation.extendsFrom implementation
     integrationTestImplementation.extendsFrom testImplementation
+    integrationTestImplementation.extendsFrom runtimeOnly
 }

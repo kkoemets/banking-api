@@ -7,5 +7,23 @@
                 http://www.springframework.org/schema/context
                 http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     <beans:import resource="classpath:core-context.xml"/>
+    <context:property-placeholder location="classpath*:integration-test.properties"/>
+
+    <beans:bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <beans:property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <beans:property name="jdbcUrl" value="${jdbc.url}"/>
+        <beans:property name="username" value="${jdbc.username}"/>
+        <beans:property name="password" value="${jdbc.password}"/>
+        <beans:property name="connectionTimeout" value="3000"/>
+        <beans:property name="idleTimeout" value="600000"/>
+        <beans:property name="maxLifetime" value="1800000"/>
+        <beans:property name="maximumPoolSize" value="10"/>
+    </beans:bean>
+
+    <beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <beans:property name="dataSource" ref="dataSource"/>
+        <beans:property name="configLocation" value="classpath*:mybatis-config.xml"/>
+        <beans:property name="mapperLocations" value="classpath*:com/kkoemets/core/dao/*.xml"/>
+    </beans:bean>
 
 </beans:beans>

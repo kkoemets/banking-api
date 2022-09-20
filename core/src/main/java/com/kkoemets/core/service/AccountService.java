@@ -10,7 +10,7 @@ public class AccountService {
 
 //    @Autowired
 //    private AccountDao dao;
-//
+
 //    public AccountId getNextSeqValue() {
 //        return dao.getNextSeqValue();
 //    }

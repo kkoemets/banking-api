@@ -7,17 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class AccountServiceIntegTest extends CoreIntegTest {
 
-    @Autowired
-    private AccountService service = new AccountService();
-
-    @Test
-    public void shouldExecute() {
-        service.add();
-    }
-
-    @Test
-    public void shouldReturnAccountId() {
-        throw new UnsupportedOperationException();
-    }
+//    @Autowired
+//    private AccountService service = new AccountService();
+//
+//    @Test
+//    public void shouldExecute() {
+//        service.add();
+//    }
+//
+//    @Test
+//    public void shouldReturnAccountId() {
+//        throw new UnsupportedOperationException();
+//    }
 
 }
