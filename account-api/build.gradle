@@ -15,9 +15,12 @@ repositories {
 
 dependencies {
     implementation project(':core')
+    implementation project(':domain')
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation "com.zaxxer:HikariCP:$HIKARI_VERSION"
     implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:$MYBATIS_VERSION"
     runtimeOnly "org.postgresql:postgresql:$POSTGRES_VERSION"
@@ -42,8 +45,24 @@ sourceSets {
     }
 }
 
+
+sourceSets {
+    restTest {
+        java {
+            srcDirs 'src/rest-test/java'
+            compileClasspath += sourceSets.main.output
+            runtimeClasspath += sourceSets.main.output
+        }
+        resources.srcDir 'src/rest-test/resources'
+    }
+}
+
 configurations {
     integrationTestImplementation.extendsFrom implementation
     integrationTestImplementation.extendsFrom testImplementation
     integrationTestImplementation.extendsFrom runtimeOnly
+
+    restTestImplementation.extendsFrom implementation
+    restTestImplementation.extendsFrom testImplementation
+    restTestImplementation.extendsFrom runtimeOnly
 }

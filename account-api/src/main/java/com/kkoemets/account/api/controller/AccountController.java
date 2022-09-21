@@ -1,5 +1,6 @@
 package com.kkoemets.account.api.controller;
 
+import com.kkoemets.account.api.controller.json.request.CreateAccountJson;
 import com.kkoemets.account.api.requestconsumer.CreateAccountJsonConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

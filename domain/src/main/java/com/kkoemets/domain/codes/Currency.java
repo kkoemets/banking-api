@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.isAlpha;
 public class Currency extends StringValue {
     private static final int CURRENCY_LENGTH = 3;
     public static final Currency EUR = create("EUR");
+    public static final Currency USD = create("USD");
 
     private Currency(String currency) {
         super(currency);
