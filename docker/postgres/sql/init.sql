@@ -6,7 +6,7 @@ CREATE SCHEMA core;
 
 CREATE TABLE core.account
 (
-    acco_id        BIGINT                   NOT NULL,
+    acco_id        BIGINT PRIMARY KEY,
     cust_id        BIGINT                   NOT NULL,
     status_code    VARCHAR(1)               NOT NULL,
     country        VARCHAR(2)               NOT NULL,
@@ -21,7 +21,7 @@ GRANT SELECT, INSERT, UPDATE ON core.account TO core_usr;
 
 CREATE TABLE core.balance
 (
-    bala_id          BIGINT                   NOT NULL,
+    bala_id          BIGINT PRIMARY KEY,
     acco_id          BIGINT                   NOT NULL,
     amount           NUMERIC(16, 2)           NOT NULL,
     ccy              VARCHAR(3)               NOT NULL,
