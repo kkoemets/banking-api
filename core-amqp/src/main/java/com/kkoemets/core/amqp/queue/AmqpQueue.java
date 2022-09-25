@@ -1,6 +1,6 @@
-package com.kkoemets.account.api.amqp.queue;
+package com.kkoemets.core.amqp.queue;
 
-import com.kkoemets.account.api.amqp.message.AmqpMessage;
+import com.kkoemets.core.amqp.message.AmqpMessage;
 import org.slf4j.Logger;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;

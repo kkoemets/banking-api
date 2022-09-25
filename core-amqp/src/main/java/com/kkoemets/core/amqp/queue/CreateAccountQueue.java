@@ -1,13 +1,14 @@
-package com.kkoemets.account.api.amqp.queue;
+package com.kkoemets.core.amqp.queue;
 
-import com.kkoemets.account.api.amqp.message.CreateAccountMessage;
+import com.kkoemets.core.amqp.message.CreateAccountMessage;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CreateAccountQueue extends AmqpQueue<CreateAccountMessage> {
+
     @Override
     String getQueueName() {
-        return "account-queue";
+        return "create-account-queue";
     }
 
 }

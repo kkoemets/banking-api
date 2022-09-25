@@ -7,4 +7,6 @@ pluginManagement {
 rootProject.name = 'banking-api'
 include 'core'
 include 'domain'
+include 'core-amqp'
 include 'account-api'
+include 'daemon'

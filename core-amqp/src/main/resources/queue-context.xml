@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/rabbit
+        http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath*:application.properties"/>
+
+    <rabbit:connection-factory id="connectionFactory" host="${ampq.host}" port="${ampq.post}"
+                               username="${ampq.username}" password="${ampq.password}"/>
+
+    <bean id="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+        <property name="modulesToInstall"
+                  value="com.kkoemets.domain.serialization.SerializerModule"/>
+    </bean>
+
+    <rabbit:admin connection-factory="connectionFactory"/>
+
+    <rabbit:template id="rabbitTemplate" connection-factory="connectionFactory"
+                     message-converter="json"/>
+
+    <bean id="json"
+          class="org.springframework.amqp.support.converter.Jackson2JsonMessageConverter">
+        <constructor-arg name="jsonObjectMapper" ref="objectMapper"/>
+    </bean>
+
+    <rabbit:queue id="create-account-queue" name="create-account-queue"/>
+
+    <rabbit:topic-exchange id="account-exchange" name="create-account-queue">
+        <rabbit:bindings>
+            <rabbit:binding queue="create-account-queue" pattern="create-account-queue">
+            </rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+
+</beans>

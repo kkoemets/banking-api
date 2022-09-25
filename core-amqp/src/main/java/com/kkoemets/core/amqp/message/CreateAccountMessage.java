@@ -1,4 +1,4 @@
-package com.kkoemets.account.api.amqp.message;
+package com.kkoemets.core.amqp.message;
 
 import com.kkoemets.domain.id.AccountId;
 

@@ -1,6 +1,6 @@
-package com.kkoemets.account.api.amqp.listener;
+package com.kkoemets.daemon.listener;
 
-import com.kkoemets.account.api.amqp.message.CreateAccountMessage;
+import com.kkoemets.core.amqp.message.CreateAccountMessage;
 import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.kkoemets.account.api.json;
+package com.kkoemets.domain.serialization;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
