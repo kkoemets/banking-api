@@ -1,4 +1,4 @@
-package com.kkoemets.account.api.requestconsumer;
+package com.kkoemets.account.api.jsonconsumer;
 
 import com.kkoemets.account.api.AccountApiRestTest;
 import org.junit.jupiter.api.Test;

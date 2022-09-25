@@ -29,4 +29,14 @@ public class CreateAccountIntegTest extends CoreIntegTest {
         createAccount.create(new CreateAccountDto(nextSeqValue, new CustomerId(1L), emptySet(), EE));
     }
 
+    @Test
+    public void balancesAreCreated() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Test
+    public void accountIsCreated() {
+        throw new UnsupportedOperationException();
+    }
+
 }

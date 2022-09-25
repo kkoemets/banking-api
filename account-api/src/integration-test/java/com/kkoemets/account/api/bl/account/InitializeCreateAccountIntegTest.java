@@ -26,4 +26,14 @@ public class InitializeCreateAccountIntegTest extends AccountApiIntegTest {
         assertNotNull(result.balances());
     }
 
+    @Test
+    public void failsIfDisallowedCurrency() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Test
+    public void queueMessageIsSent() {
+        throw new UnsupportedOperationException();
+    }
+
 }

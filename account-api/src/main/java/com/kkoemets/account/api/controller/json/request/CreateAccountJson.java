@@ -1,12 +1,26 @@
 package com.kkoemets.account.api.controller.json.request;
 
+import com.kkoemets.account.api.controller.ListValueValidation;
+
+import javax.validation.constraints.*;
 import java.util.List;
 
-public class CreateAccountJson {
-    private Long customerId;
-    private String countryCode;
-    private List<String> currencies;
+import static com.kkoemets.account.api.controller.FieldValidation.*;
+import static com.kkoemets.account.api.controller.ValidationMessage.FIELD_INVALID_VALUE;
+import static com.kkoemets.account.api.controller.ValidationMessage.FIELD_MANDATORY;
 
+public class CreateAccountJson {
+
+    @NotNull(message = FIELD_MANDATORY)
+    @Min(value = MIN_CUSTOMER_ID, message = FIELD_INVALID_VALUE)
+    private Long customerId;
+    @NotBlank(message = FIELD_MANDATORY)
+    @Pattern(regexp = COUNTRY_CODE_REGEX, message = FIELD_INVALID_VALUE)
+    private String countryCode;
+    @NotEmpty(message = FIELD_MANDATORY)
+    @Size(max = MAX_CURRENCIES)
+    @ListValueValidation(message = FIELD_INVALID_VALUE, regexp = CURRENCY_REGEX)
+    private List<String> currencies;
 
     public Long getCustomerId() {
         return customerId;

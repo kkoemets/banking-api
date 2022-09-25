@@ -1,4 +1,4 @@
-package com.kkoemets.account.api.requestconsumer;
+package com.kkoemets.account.api.jsonconsumer;
 
 import com.kkoemets.account.api.bl.account.InitializeCreateAccount;
 import com.kkoemets.account.api.bl.account.InitializeCreateAccountDto;

@@ -1,5 +1,7 @@
 package com.kkoemets.account.api.bl.account;
 
+import com.kkoemets.core.amqp.message.CreateAccountMessage;
+import com.kkoemets.core.amqp.queue.CreateAccountQueue;
 import com.kkoemets.core.service.AccountService;
 import com.kkoemets.domain.balance.Money;
 import com.kkoemets.domain.codes.CountryIsoCode2;
@@ -22,6 +24,8 @@ public class InitializeCreateAccount {
 
     @Autowired
     private AccountService accounts;
+    @Autowired
+    private CreateAccountQueue createAccountQueue;
 
     @Transactional
     public InitializeCreateAccountResult initialize(InitializeCreateAccountDto dto) {
@@ -30,7 +34,11 @@ public class InitializeCreateAccount {
         CountryIsoCode2 country = dto.country();
         log.info("Creating account for customer-{} with currencies-{}, country-{}", customerId, currencies, country);
 
-        return new InitializeCreateAccountResult(accounts.getNextSeqValue(), customerId,
+        AccountId accountId = accounts.getNextSeqValue();
+
+        createAccountQueue.send(new CreateAccountMessage(accountId, customerId, currencies, country));
+
+        return new InitializeCreateAccountResult(accountId, customerId,
                 currencies
                         .stream()
                         .map(Money::zero)
