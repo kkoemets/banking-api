@@ -12,4 +12,9 @@ public record Money(BigDecimal amount, Currency currency) {
         return new Money(ZERO, currency);
     }
 
+    @Override
+    public String toString() {
+        return "%s %s".formatted(amount, currency);
+    }
+
 }

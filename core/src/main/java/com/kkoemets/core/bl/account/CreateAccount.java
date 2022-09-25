@@ -5,6 +5,7 @@ import com.kkoemets.core.service.AddAccountDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -15,6 +16,7 @@ public class CreateAccount {
     @Autowired
     private AccountService accounts;
 
+    @Transactional
     public void create(CreateAccountDto dto) {
         if (accounts.exists(dto.accountId())) {
             log.info("Account already exists");

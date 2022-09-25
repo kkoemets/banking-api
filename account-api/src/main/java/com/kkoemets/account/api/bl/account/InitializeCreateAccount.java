@@ -9,6 +9,7 @@ import com.kkoemets.domain.id.CustomerId;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class InitializeCreateAccount {
     @Autowired
     private AccountService accounts;
 
+    @Transactional
     public InitializeCreateAccountResult initialize(InitializeCreateAccountDto dto) {
         CustomerId customerId = dto.customerId();
         List<Currency> currencies = dto.currencies();

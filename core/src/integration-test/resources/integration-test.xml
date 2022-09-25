@@ -2,10 +2,13 @@
 <beans:beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xmlns:context="http://www.springframework.org/schema/context"
              xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:tx="http://www.springframework.org/schema/tx"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
                 http://www.springframework.org/schema/beans/spring-beans.xsd
                 http://www.springframework.org/schema/context
-                http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+                http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                http://www.springframework.org/schema/tx
+                http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
     <beans:import resource="classpath:core-context.xml"/>
     <context:property-placeholder location="classpath*:integration-test.properties"/>
 
@@ -19,6 +22,13 @@
         <beans:property name="maxLifetime" value="1800000"/>
         <beans:property name="maximumPoolSize" value="10"/>
     </beans:bean>
+
+    <beans:bean id="transactionManager"
+                class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <beans:property name="dataSource" ref="dataSource"/>
+    </beans:bean>
+
+    <tx:annotation-driven proxy-target-class="true"/>
 
     <beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <beans:property name="dataSource" ref="dataSource"/>
