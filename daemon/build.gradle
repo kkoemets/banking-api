@@ -1,11 +1,11 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.3'
-    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id 'org.springframework.boot' version "$SPRING_BOOT_VERSION"
+    id 'io.spring.dependency-management' version "$SPRING_DEPENDENCY_MANAGEMENT_VERSION"
     id 'java'
 }
 
 version = '1.0'
-sourceCompatibility = '18'
+sourceCompatibility = "$SOURCE_COMPATIBILITY_JAVA_VERSION"
 group = 'com.kkoemets'
 
 repositories {
