@@ -3,17 +3,20 @@ package com.kkoemets.account.api.controller;
 import com.kkoemets.account.api.controller.json.request.CreateAccountJson;
 import com.kkoemets.account.api.jsonconsumer.CreateAccountJsonConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collections;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
-import static java.util.stream.Collectors.toMap;
+import static java.util.Collections.singletonMap;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestController
@@ -29,11 +32,26 @@ public class AccountController {
 
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        return Collections.singletonMap("errors", ex.getBindingResult()
+    private Map<String, Object> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        return singletonMap("error", ex.getBindingResult()
                 .getAllErrors()
                 .stream()
-                .collect(toMap(e -> ((FieldError) e).getField(), DefaultMessageSourceResolvable::getDefaultMessage)));
+                .map(e -> new SimpleEntry<>(((FieldError) e).getField(), e.getDefaultMessage()))
+                .collect(groupingBy(SimpleEntry::getKey))
+                .entrySet()
+                .stream()
+                .map(this::createFieldWithListOfErrors)
+                .collect(toList())
+        );
+    }
+
+    private SimpleEntry<String, List<String>> createFieldWithListOfErrors(
+            Entry<String, List<SimpleEntry<String, String>>> e) {
+        return new SimpleEntry<>(e.getKey(), e.getValue()
+                .stream()
+                .map(SimpleEntry::getValue)
+                .collect(toList())
+        );
     }
 
 }
