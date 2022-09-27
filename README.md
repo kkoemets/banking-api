@@ -5,7 +5,7 @@ The aim of this project is to demonstrate how to create a simple banking API wit
 
 Here is the list of technologies used:
 
-* Java 18
+* Java 17
 * Spring Boot 2
 * Postgres 13
 * Liquibase
@@ -19,7 +19,7 @@ Here is the list of technologies used:
 Here is the list of prerequisites to run the applications:
 
 * Docker
-* Java 18 SDK
+* Java 17 SDK
 
 ### Getting started on development environment
 Development has been mainly done on WSL2 using IntelliJ and bash environment.
