@@ -30,7 +30,6 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-
 sourceSets {
     integrationTest {
         java {
@@ -40,6 +39,14 @@ sourceSets {
         }
         resources.srcDir 'src/integration-test/resources'
     }
+}
+
+task integrationTest(type: Test) {
+    useJUnitPlatform()
+    group = 'verification'
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    outputs.upToDateWhen { false }
 }
 
 configurations {
