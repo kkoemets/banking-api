@@ -40,6 +40,7 @@
     </beans:bean>
 
     <beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <beans:property name="annotationClass" value="com.kkoemets.core.mybatis.annotation.CoreDao"/>
         <beans:property name="basePackage" value="com.kkoemets.core.dao"/>
         <beans:property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </beans:bean>

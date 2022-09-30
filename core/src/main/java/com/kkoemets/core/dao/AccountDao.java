@@ -1,12 +1,12 @@
 package com.kkoemets.core.dao;
 
+import com.kkoemets.core.mybatis.annotation.CoreDao;
 import com.kkoemets.core.service.AddAccountDto;
 import com.kkoemets.domain.id.AccountId;
 import com.kkoemets.domain.status.AccountStatus;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-@Mapper
+@CoreDao
 public interface AccountDao {
 
     AccountId getNextSeqValue();
