@@ -18,6 +18,7 @@ public class CreateAccount {
 
     @Transactional
     public void create(CreateAccountDto dto) {
+        log.info("Creating account");
         if (accounts.exists(dto.accountId())) {
             log.info("Account already exists");
             return;
