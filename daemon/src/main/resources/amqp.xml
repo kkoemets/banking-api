@@ -11,8 +11,8 @@
 
     <import resource="classpath*:queue-context.xml"/>
 
-    <rabbit:listener-container connection-factory="connectionFactory">
-        <rabbit:listener ref="createAccountListener" queue-names="create-account-queue"/>
+    <rabbit:listener-container connection-factory="connectionFactory" concurrency="3" requeue-rejected="false">
+        <rabbit:listener ref="createAccountListener" queues="create-account-queue"/>
     </rabbit:listener-container>
 
 </beans>

@@ -34,7 +34,7 @@
 
     <rabbit:queue id="create-account-queue" name="create-account-queue"/>
 
-    <rabbit:topic-exchange id="account-exchange" name="create-account-queue">
+    <rabbit:topic-exchange id="account-exchange" name="account-exchange">
         <rabbit:bindings>
             <rabbit:binding queue="create-account-queue" pattern="create-account-queue">
             </rabbit:binding>

@@ -20,7 +20,6 @@ public class CreateAccountListener extends AmqpListener<CreateAccountMessage> {
 
     @Override
     public void onMessage(CreateAccountMessage message) {
-        log.info("{}", message);
         createAccount.create(new CreateAccountDto(message.getAccountId(), message.getCustomerId(),
                 new HashSet<>(message.getCurrencies()), message.getCountryCode()));
     }
