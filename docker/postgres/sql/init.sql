@@ -3,11 +3,11 @@ $audit_trigger$
 BEGIN
     IF (tg_op = 'INSERT') THEN
         new.inserted_timestamp := CURRENT_TIMESTAMP;
-        new.inserted_user := CURRENT_USER;
+        new.inserted_session_id := current_setting('app.session_id');
     END IF;
 
     new.modified_timestamp := CURRENT_TIMESTAMP;
-    new.modified_user := CURRENT_USER;
+    new.modified_session_id := current_setting('app.session_id');
     RETURN new;
 END;
 $audit_trigger$ LANGUAGE plpgsql;
@@ -20,16 +20,17 @@ CREATE SCHEMA core;
 
 CREATE TABLE core.account
 (
-    acco_id            BIGINT PRIMARY KEY,
-    cust_id            BIGINT                   NOT NULL,
-    status_code        VARCHAR(1)               NOT NULL,
-    country            VARCHAR(2)               NOT NULL,
-    inserted_dtime     TIMESTAMP WITH TIME ZONE NOT NULL,
+    acco_id             BIGINT PRIMARY KEY,
+    cust_id             BIGINT                   NOT NULL,
+    status_code         VARCHAR(1)               NOT NULL,
+    country             VARCHAR(2)               NOT NULL,
+    inserted_dtime      TIMESTAMP WITH TIME ZONE NOT NULL,
 
-    inserted_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    inserted_user      VARCHAR(255),
-    modified_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    modified_user      VARCHAR(255)
+    inserted_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
+    inserted_session_id VARCHAR(255),
+
+    modified_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
+    modified_session_id VARCHAR(255)
 );
 
 CREATE SEQUENCE core.acco_seq AS
@@ -46,15 +47,16 @@ EXECUTE FUNCTION audit_trigger();
 
 CREATE TABLE core.balance
 (
-    bala_id            BIGINT PRIMARY KEY,
-    acco_id            BIGINT                   NOT NULL,
-    amount             NUMERIC(16, 2)           NOT NULL,
-    ccy                VARCHAR(3)               NOT NULL,
+    bala_id             BIGINT PRIMARY KEY,
+    acco_id             BIGINT                   NOT NULL,
+    amount              NUMERIC(16, 2)           NOT NULL,
+    ccy                 VARCHAR(3)               NOT NULL,
 
-    inserted_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    inserted_user      VARCHAR(255),
-    modified_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    modified_user      VARCHAR(255)
+    inserted_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
+    inserted_session_id VARCHAR(255),
+
+    modified_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
+    modified_session_id VARCHAR(255)
 );
 
 CREATE SEQUENCE core.bala_seq AS
