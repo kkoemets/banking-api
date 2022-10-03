@@ -24,7 +24,7 @@
     </beans:bean>
 
     <beans:bean id="transactionManager"
-                class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+                class="com.kkoemets.core.TransactionManager">
         <beans:property name="dataSource" ref="dataSource"/>
     </beans:bean>
 
