@@ -45,4 +45,8 @@ public class InitializeCreateAccount {
                         .collect(toList()));
     }
 
+    void setCreateAccountQueue(CreateAccountQueue createAccountQueue) {
+        this.createAccountQueue = createAccountQueue;
+    }
+
 }
