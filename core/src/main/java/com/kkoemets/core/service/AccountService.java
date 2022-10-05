@@ -3,11 +3,11 @@ package com.kkoemets.core.service;
 import com.kkoemets.core.dao.AccountDao;
 import com.kkoemets.domain.id.AccountId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import static com.kkoemets.domain.status.AccountStatus.ACTIVE;
 
-@Component
+@Service
 public class AccountService {
 
     @Autowired

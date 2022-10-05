@@ -2,6 +2,7 @@ package com.kkoemets.core.bl.account;
 
 import com.kkoemets.core.service.AccountService;
 import com.kkoemets.core.service.AddAccountDto;
+import com.kkoemets.core.service.BalanceService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,8 @@ public class CreateAccount {
 
     @Autowired
     private AccountService accounts;
+    @Autowired
+    private BalanceService balances;
 
     @Transactional
     public void create(CreateAccountDto dto) {
@@ -25,6 +28,10 @@ public class CreateAccount {
         }
 
         accounts.add(new AddAccountDto(dto.accountId(), dto.customerId(), dto.country()));
+
+        balances.insert(dto.accountId(), dto.currencies());
+
+        log.info("Account created");
     }
 
 }

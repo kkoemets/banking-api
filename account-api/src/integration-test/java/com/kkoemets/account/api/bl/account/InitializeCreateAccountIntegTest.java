@@ -44,6 +44,11 @@ public class InitializeCreateAccountIntegTest extends AccountApiIntegTest {
     }
 
     @Test
+    public void failsIfDuplicateCurrenciesAreInDto() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Test
     public void queueMessageIsSent() {
         CreateAccountQueue mockQueue = mock(CreateAccountQueue.class);
         initializeCreateAccount.setCreateAccountQueue(mockQueue);

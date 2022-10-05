@@ -12,10 +12,10 @@
         VALUES (#{dto.accountId}, #{dto.customerId}, #{status}, #{dto.country}, CURRENT_TIMESTAMP)
     </insert>
 
-    <insert id="exists">
-        SELECT COUNT(*) > 0
-        FROM core.account
-        WHERE acco_id = #{accountId}
-    </insert>
+    <select id="exists" resultType="boolean">
+        SELECT EXISTS(SELECT acco_id
+                      FROM core.account
+                      WHERE acco_id = #{accountId})
+    </select>
 
 </mapper>

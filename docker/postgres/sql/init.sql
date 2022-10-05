@@ -3,11 +3,11 @@ $audit_trigger$
 BEGIN
     IF (tg_op = 'INSERT') THEN
         new.inserted_timestamp := CURRENT_TIMESTAMP;
-        new.inserted_session_id := current_setting('app.session_id');
+        new.inserted_session_id := CURRENT_SETTING('app.session_id');
     END IF;
 
     new.modified_timestamp := CURRENT_TIMESTAMP;
-    new.modified_session_id := current_setting('app.session_id');
+    new.modified_session_id := CURRENT_SETTING('app.session_id');
     RETURN new;
 END;
 $audit_trigger$ LANGUAGE plpgsql;
@@ -51,10 +51,10 @@ CREATE TABLE core.balance
     acco_id             BIGINT                   NOT NULL,
     amount              NUMERIC(16, 2)           NOT NULL,
     ccy                 VARCHAR(3)               NOT NULL,
+    valid_to_timestamp  TIMESTAMP WITH TIME ZONE,
 
     inserted_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
     inserted_session_id VARCHAR(255),
-
     modified_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
     modified_session_id VARCHAR(255)
 );

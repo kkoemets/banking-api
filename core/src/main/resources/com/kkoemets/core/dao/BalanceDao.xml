@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kkoemets.core.dao.BalanceDao">
+
+    <select id="findBalance" resultType="com.kkoemets.domain.balance.Money">
+        SELECT amount AS "amount",
+               ccy    AS "currency"
+        FROM core.balance
+        WHERE acco_id = #{accountId}
+          AND ccy = #{currency}
+          AND COALESCE(valid_to_timestamp, 'infinity'::TIMESTAMP) > CURRENT_TIMESTAMP
+    </select>
+
+    <insert id="insertBalances">
+        INSERT INTO core.balance (bala_id, acco_id, amount, ccy)
+        VALUES
+        <foreach collection="currencies" open="(" item="currency" separator="),(" close=")">
+            NEXTVAL('core.bala_seq'),
+            #{accountId},
+            #{amount},
+            #{currency}
+        </foreach>
+    </insert>
+</mapper>
