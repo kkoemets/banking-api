@@ -8,7 +8,7 @@
     </select>
 
     <insert id="add">
-        INSERT INTO core.account (acco_id, cust_id, status_code, country, inserted_dtime)
+        INSERT INTO core.account (acco_id, cust_id, status_code, country, inserted_timestamp)
         VALUES (#{dto.accountId}, #{dto.customerId}, #{status}, #{dto.country}, CURRENT_TIMESTAMP)
     </insert>
 

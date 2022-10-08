@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kkoemets.core.dao.TransactionDao">
+
+    <select id="getNextSeqValue" resultType="com.kkoemets.domain.id.TransactionId">
+        SELECT NEXTVAL('core.tran_seq');
+    </select>
+
+    <select id="exists" resultType="boolean">
+        SELECT EXISTS(SELECT tran_id
+                      FROM core.transaction
+                      WHERE tran_id = #{transactionId})
+    </select>
+
+    <insert id="add">
+        INSERT INTO core.transaction (tran_id, acco_id, amount, ccy, direction, description, status, inserted_timestamp)
+        VALUES (#{dto.transactionId}, #{dto.accountId}, #{dto.amount.amount}, #{dto.amount.currency},
+                #{dto.direction}, #{dto.description}, #{status}, CURRENT_TIMESTAMP);
+    </insert>
+
+    <select id="findAmount" resultType="com.kkoemets.domain.balance.Money">
+        SELECT amount AS "amount", ccy AS "currency"
+        FROM core.transaction
+        WHERE tran_id = #{transactionId}
+    </select>
+
+    <select id="findDirection" resultType="com.kkoemets.domain.codes.TransactionDirection">
+        SELECT direction
+        FROM core.transaction
+        WHERE tran_id = #{transactionId}
+    </select>
+
+    <select id="findStatus" resultType="com.kkoemets.domain.codes.TransactionStatus">
+        SELECT status
+        FROM core.transaction
+        WHERE tran_id = #{transactionId}
+    </select>
+
+    <select id="findDescription" resultType="java.lang.String">
+        SELECT description
+        FROM core.transaction
+        WHERE tran_id = #{transactionId}
+    </select>
+
+</mapper>

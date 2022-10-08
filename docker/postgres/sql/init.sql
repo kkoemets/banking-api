@@ -2,8 +2,8 @@ CREATE FUNCTION audit_trigger() RETURNS TRIGGER AS
 $audit_trigger$
 BEGIN
     IF (tg_op = 'INSERT') THEN
-        new.inserted_timestamp := CURRENT_TIMESTAMP;
-        new.inserted_session_id := CURRENT_SETTING('app.session_id');
+        new.created_timestamp := CURRENT_TIMESTAMP;
+        new.created_session_id := CURRENT_SETTING('app.session_id');
     END IF;
 
     new.modified_timestamp := CURRENT_TIMESTAMP;
@@ -24,11 +24,10 @@ CREATE TABLE core.account
     cust_id             BIGINT                   NOT NULL,
     status_code         VARCHAR(1)               NOT NULL,
     country             VARCHAR(2)               NOT NULL,
-    inserted_dtime      TIMESTAMP WITH TIME ZONE NOT NULL,
-
     inserted_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
-    inserted_session_id VARCHAR(255),
 
+    created_timestamp   TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_session_id  VARCHAR(255),
     modified_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
     modified_session_id VARCHAR(255)
 );
@@ -53,8 +52,8 @@ CREATE TABLE core.balance
     ccy                 VARCHAR(3)               NOT NULL,
     valid_to_timestamp  TIMESTAMP WITH TIME ZONE,
 
-    inserted_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
-    inserted_session_id VARCHAR(255),
+    created_timestamp   TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_session_id  VARCHAR(255),
     modified_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
     modified_session_id VARCHAR(255)
 );
@@ -76,8 +75,8 @@ CREATE TABLE core.allowed_currency
     ccy                 VARCHAR(3) UNIQUE        NOT NULL,
     enabled             BOOLEAN                  NOT NULL,
 
-    inserted_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
-    inserted_session_id VARCHAR(255),
+    created_timestamp   TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_session_id  VARCHAR(255),
     modified_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
     modified_session_id VARCHAR(255)
 );
@@ -95,3 +94,32 @@ VALUES ('EUR', TRUE),
        ('SEK', TRUE),
        ('GBP', TRUE),
        ('USD', TRUE);
+
+CREATE TABLE core.transaction
+(
+    tran_id             BIGINT PRIMARY KEY,
+    acco_id             BIGINT                   NOT NULL,
+    amount              NUMERIC(16, 2)           NOT NULL,
+    ccy                 VARCHAR(3)               NOT NULL,
+    direction           VARCHAR(3)               NOT NULL,
+    description         VARCHAR(140)             NOT NULL,
+    status              VARCHAR(3)               NOT NULL,
+    inserted_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
+
+    created_timestamp   TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_session_id  VARCHAR(255),
+    modified_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
+    modified_session_id VARCHAR(255)
+);
+
+CREATE SEQUENCE core.tran_seq AS
+    BIGINT INCREMENT BY 1
+    START WITH 1000;
+
+GRANT SELECT, INSERT, UPDATE ON core.transaction TO core_usr;
+
+CREATE TRIGGER transaction_audit_trigger
+    BEFORE INSERT OR UPDATE
+    ON core.transaction
+    FOR EACH ROW
+EXECUTE FUNCTION audit_trigger();
