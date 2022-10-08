@@ -70,3 +70,28 @@ CREATE TRIGGER balance_audit_trigger
     ON core.balance
     FOR EACH ROW
 EXECUTE FUNCTION audit_trigger();
+
+CREATE TABLE core.allowed_currency
+(
+    ccy                 VARCHAR(3) UNIQUE        NOT NULL,
+    enabled             BOOLEAN                  NOT NULL,
+
+    inserted_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
+    inserted_session_id VARCHAR(255),
+    modified_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
+    modified_session_id VARCHAR(255)
+);
+
+CREATE TRIGGER allowed_currency_audit_trigger
+    BEFORE INSERT OR UPDATE
+    ON core.allowed_currency
+    FOR EACH ROW
+EXECUTE FUNCTION audit_trigger();
+GRANT SELECT ON core.balance TO core_usr;
+
+SELECT SET_CONFIG('app.session_id', 'init.sql', FALSE);
+INSERT INTO core.allowed_currency (ccy, enabled)
+VALUES ('EUR', TRUE),
+       ('SEK', TRUE),
+       ('GBP', TRUE),
+       ('USD', TRUE);

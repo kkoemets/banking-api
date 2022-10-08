@@ -5,4 +5,17 @@
              xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     <context:component-scan base-package="com.kkoemets.core"/>
+
+    <beans:bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <beans:property name="caches">
+            <beans:set>
+                <beans:bean
+                        class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                        name="allowedCurrencies">
+                    <beans:property name="allowNullValues" value="false"/>
+                </beans:bean>
+            </beans:set>
+        </beans:property>
+    </beans:bean>
+
 </beans:beans>
