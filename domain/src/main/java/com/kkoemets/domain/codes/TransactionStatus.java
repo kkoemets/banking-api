@@ -1,5 +1,7 @@
 package com.kkoemets.domain.codes;
 
+import java.util.Arrays;
+
 public enum TransactionStatus {
     NEW("NEW"),
     PROCESSED("PRC"),
@@ -12,7 +14,11 @@ public enum TransactionStatus {
     }
 
     public static TransactionStatus create(String code) {
-        return TransactionStatus.valueOf(code);
+        return Arrays
+                .stream(TransactionStatus.values())
+                .filter(value -> value.code.equals(code))
+                .findFirst()
+                .orElseThrow();
     }
 
     public String getCode() {

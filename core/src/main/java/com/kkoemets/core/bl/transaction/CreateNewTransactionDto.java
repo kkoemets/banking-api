@@ -1,4 +1,4 @@
-package com.kkoemets.core.bl.account;
+package com.kkoemets.core.bl.transaction;
 
 import com.kkoemets.domain.balance.Money;
 import com.kkoemets.domain.codes.TransactionDirection;

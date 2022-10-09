@@ -25,4 +25,8 @@ public class AccountService {
         return dao.exists(accountId);
     }
 
+    public void lock(AccountId accountId) {
+        dao.lock(accountId);
+    }
+
 }

@@ -5,6 +5,7 @@ import com.kkoemets.core.service.AddTransactionDto;
 import com.kkoemets.domain.balance.Money;
 import com.kkoemets.domain.codes.TransactionDirection;
 import com.kkoemets.domain.codes.TransactionStatus;
+import com.kkoemets.domain.id.AccountId;
 import com.kkoemets.domain.id.TransactionId;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,5 +26,10 @@ public interface TransactionDao {
     TransactionStatus findStatus(TransactionId transactionId);
 
     String findDescription(@Param("transactionId") TransactionId transactionId);
+
+    AccountId findAccountId(@Param("transactionId") TransactionId transactionId);
+
+    Integer setStatus(@Param("transactionId") TransactionId transactionId,
+                  @Param("status") TransactionStatus status);
 
 }

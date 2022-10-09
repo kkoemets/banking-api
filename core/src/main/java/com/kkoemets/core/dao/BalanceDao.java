@@ -20,4 +20,10 @@ public interface BalanceDao {
                         @Param("amount") BigDecimal amount,
                         @Param("currencies") List<Currency> currencies);
 
+    int increase(@Param("accountId") AccountId accountId,
+                 @Param("byAmount") Money byAmount);
+
+    int decrease(@Param("accountId") AccountId accountId,
+                 @Param("byAmount") Money byAmount);
+
 }

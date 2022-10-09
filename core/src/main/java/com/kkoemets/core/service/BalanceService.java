@@ -28,4 +28,16 @@ public class BalanceService {
         dao.insertBalances(accountId, DEFAULT_AMOUNT, currencies);
     }
 
+    public void increase(AccountId accountId, Money byAmount) {
+        if (dao.increase(accountId, byAmount) < 1) {
+            throw new FailedUpdateException();
+        }
+    }
+
+    public void decrease(AccountId accountId, Money byAmount) {
+        if (dao.decrease(accountId, byAmount) < 1) {
+            throw new FailedUpdateException();
+        }
+    }
+
 }

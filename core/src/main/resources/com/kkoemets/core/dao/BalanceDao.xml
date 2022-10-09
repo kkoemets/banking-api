@@ -22,4 +22,19 @@
             #{currency}
         </foreach>
     </insert>
+
+    <update id="increase">
+        UPDATE core.balance
+        SET amount = amount + #{byAmount.amount}
+        WHERE acco_id = #{accountId}
+          AND ccy = #{byAmount.currency}
+    </update>
+
+    <update id="decrease">
+        UPDATE core.balance
+        SET amount = amount - #{byAmount.amount}
+        WHERE acco_id = #{accountId}
+          AND ccy = #{byAmount.currency}
+    </update>
+
 </mapper>

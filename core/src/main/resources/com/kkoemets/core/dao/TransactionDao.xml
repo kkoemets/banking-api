@@ -4,7 +4,7 @@
 <mapper namespace="com.kkoemets.core.dao.TransactionDao">
 
     <select id="getNextSeqValue" resultType="com.kkoemets.domain.id.TransactionId">
-        SELECT NEXTVAL('core.tran_seq');
+        SELECT NEXTVAL('core.tran_seq')
     </select>
 
     <select id="exists" resultType="boolean">
@@ -16,7 +16,7 @@
     <insert id="add">
         INSERT INTO core.transaction (tran_id, acco_id, amount, ccy, direction, description, status, inserted_timestamp)
         VALUES (#{dto.transactionId}, #{dto.accountId}, #{dto.amount.amount}, #{dto.amount.currency},
-                #{dto.direction}, #{dto.description}, #{status}, CURRENT_TIMESTAMP);
+                #{dto.direction}, #{dto.description}, #{status}, CURRENT_TIMESTAMP)
     </insert>
 
     <select id="findAmount" resultType="com.kkoemets.domain.balance.Money">
@@ -42,5 +42,17 @@
         FROM core.transaction
         WHERE tran_id = #{transactionId}
     </select>
+
+    <select id="findAccountId" resultType="com.kkoemets.domain.id.AccountId">
+        SELECT acco_id
+        FROM core.transaction
+        WHERE tran_id = #{transactionId}
+    </select>
+
+    <update id="setStatus">
+        UPDATE core.transaction
+        SET status = #{status}
+        WHERE tran_id = #{transactionId}
+    </update>
 
 </mapper>

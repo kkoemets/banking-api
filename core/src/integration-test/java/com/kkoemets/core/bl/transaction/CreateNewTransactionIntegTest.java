@@ -1,4 +1,4 @@
-package com.kkoemets.core.bl.account;
+package com.kkoemets.core.bl.transaction;
 
 import com.kkoemets.core.CoreIntegTest;
 import com.kkoemets.core.exception.InvalidStateException;
@@ -6,15 +6,11 @@ import com.kkoemets.core.service.AccountService;
 import com.kkoemets.core.service.TransactionService;
 import com.kkoemets.domain.balance.Money;
 import com.kkoemets.domain.id.AccountId;
-import com.kkoemets.domain.id.CustomerId;
 import com.kkoemets.domain.id.TransactionId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-
 import static com.kkoemets.core.exception.CoreExceptionMessage.ERROR_ACCOUNT_DOES_NOT_EXIST;
-import static com.kkoemets.domain.codes.CountryIsoCode2.EE;
 import static com.kkoemets.domain.codes.Currency.EUR;
 import static com.kkoemets.domain.codes.TransactionDirection.IN;
 import static java.math.BigDecimal.TEN;
@@ -26,8 +22,6 @@ public class CreateNewTransactionIntegTest extends CoreIntegTest {
 
     @Autowired
     private CreateNewTransaction createNewTransaction;
-    @Autowired
-    private CreateAccount createAccount;
     @Autowired
     private TransactionService transactions;
     @Autowired
@@ -108,10 +102,7 @@ public class CreateNewTransactionIntegTest extends CoreIntegTest {
     }
 
     private CreateNewTransactionDto createDto() {
-        AccountId accountId = accounts.getNextSeqValue();
-        createAccount.create(new CreateAccountDto(accountId, new CustomerId(1L), List.of(EUR), EE));
-
-        return new CreateNewTransactionDto(transactions.getNextSeqValue(), accountId, new Money(TEN, EUR), "asd", IN);
+        return createDto(createAccount());
     }
 
     private CreateNewTransactionDto createDto(AccountId accountId) {

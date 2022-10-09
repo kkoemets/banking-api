@@ -1,4 +1,4 @@
-package com.kkoemets.core.bl.account;
+package com.kkoemets.core.bl.transaction;
 
 import com.kkoemets.core.exception.InvalidStateException;
 import com.kkoemets.core.service.AccountService;
@@ -9,6 +9,7 @@ import com.kkoemets.domain.id.TransactionId;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.kkoemets.core.exception.CoreExceptionMessage.ERROR_ACCOUNT_DOES_NOT_EXIST;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -22,6 +23,7 @@ public class CreateNewTransaction {
     @Autowired
     private TransactionService transactions;
 
+    @Transactional
     public void create(CreateNewTransactionDto dto) {
         TransactionId transactionId = dto.transactionId();
         log.info("Creating new transaction-{}", transactionId);

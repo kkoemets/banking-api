@@ -15,4 +15,6 @@ public interface AccountDao {
 
     boolean exists(@Param("accountId") AccountId accountId);
 
+    AccountId lock(@Param("accountId") AccountId accountId);
+
 }
