@@ -49,7 +49,7 @@ CREATE SEQUENCE core.acco_seq AS
 GRANT SELECT, INSERT, UPDATE ON core.account TO core_usr;
 
 CREATE TRIGGER account_audit_trigger
-    BEFORE INSERT OR UPDATE
+    BEFORE INSERT OR UPDATE OR DELETE
     ON core.account
     FOR EACH ROW
 EXECUTE FUNCTION audit_trigger();
@@ -108,7 +108,7 @@ CREATE TABLE core_audit.balance_audit
 );
 
 CREATE TRIGGER balance_audit_trigger
-    BEFORE INSERT OR UPDATE
+    BEFORE INSERT OR UPDATE OR DELETE
     ON core.balance
     FOR EACH ROW
 EXECUTE FUNCTION audit_trigger();
@@ -139,7 +139,7 @@ CREATE TABLE core_audit.allowed_currency_audit
 );
 
 CREATE TRIGGER allowed_currency_audit_trigger
-    BEFORE INSERT OR UPDATE
+    BEFORE INSERT OR UPDATE OR DELETE
     ON core.allowed_currency
     FOR EACH ROW
 EXECUTE FUNCTION audit_trigger();
@@ -197,7 +197,7 @@ CREATE SEQUENCE core.tran_seq AS
 GRANT SELECT, INSERT, UPDATE ON core.transaction TO core_usr;
 
 CREATE TRIGGER transaction_audit_trigger
-    BEFORE INSERT OR UPDATE
+    BEFORE INSERT OR UPDATE OR DELETE
     ON core.transaction
     FOR EACH ROW
 EXECUTE FUNCTION audit_trigger();
