@@ -10,8 +10,8 @@ public enum TransactionDirection {
         this.code = code;
     }
 
-    private static TransactionDirection create(String countryCode) {
-        return TransactionDirection.valueOf(countryCode);
+    public static TransactionDirection create(String code) {
+        return TransactionDirection.valueOf(code);
     }
 
     public String getCode() {

@@ -15,11 +15,11 @@ public class CreateAccountJson {
     @Min(value = MIN_CUSTOMER_ID, message = FIELD_INVALID_VALUE)
     private Long customerId;
     @NotBlank(message = FIELD_MANDATORY)
-    @Pattern(regexp = COUNTRY_CODE_REGEX, message = FIELD_INVALID_VALUE)
+    @Pattern(regexp = Regex.COUNTRY_CODE, message = FIELD_INVALID_VALUE)
     private String countryCode;
     @NotEmpty(message = FIELD_MANDATORY)
     @Size(max = MAX_CURRENCIES)
-    @ListValueValidation(message = FIELD_INVALID_VALUE, regexp = CURRENCY_REGEX)
+    @ListValueValidation(message = FIELD_INVALID_VALUE, regexp = Regex.CURRENCY)
     private List<String> currencies;
 
     public Long getCustomerId() {
