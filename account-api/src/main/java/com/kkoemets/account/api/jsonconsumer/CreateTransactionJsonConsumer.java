@@ -1,7 +1,8 @@
 package com.kkoemets.account.api.jsonconsumer;
 
-import com.kkoemets.account.api.bl.transaction.InitializeCreateNewTransaction;
-import com.kkoemets.account.api.bl.transaction.InitializeCreateNewTransactionDto;
+import com.kkoemets.account.api.bl.transaction.CreateNewTransaction;
+import com.kkoemets.account.api.bl.transaction.CreateNewTransactionDto;
+import com.kkoemets.account.api.bl.transaction.CreateNewTransactionResultDto;
 import com.kkoemets.account.api.controller.json.request.CreateTransactionJson;
 import com.kkoemets.domain.balance.Money;
 import com.kkoemets.domain.codes.Currency;
@@ -11,7 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
-import static java.util.Collections.emptyMap;
+import java.util.Map;
+
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.StringUtils.trimWhitespace;
 
@@ -19,17 +21,28 @@ import static org.springframework.util.StringUtils.trimWhitespace;
 public class CreateTransactionJsonConsumer {
 
     @Autowired
-    private InitializeCreateNewTransaction initializeCreateNewTransaction;
+    private CreateNewTransaction createNewTransaction;
 
-    public ResponseEntity<?> create(CreateTransactionJson json) {
-        initializeCreateNewTransaction.initialize(toDto(json));
-        return ok(emptyMap());
+    public ResponseEntity<Map<String, Object>> create(CreateTransactionJson json) {
+        CreateNewTransactionDto dto = toDto(json);
+        CreateNewTransactionResultDto resultDto = createNewTransaction.create(dto);
+
+        Money transactionAmount = dto.amount();
+        return ok(Map.of(
+                "accountId", resultDto.accountId(),
+                "transactionId", resultDto.transactionId(),
+                "amount", transactionAmount.amount(),
+                "currency", transactionAmount.currency(),
+                "direction", dto.direction(),
+                "description", dto.description(),
+                "balance", resultDto.newBalance().amount()
+        ));
     }
 
-    private static InitializeCreateNewTransactionDto toDto(CreateTransactionJson json) {
-        return new InitializeCreateNewTransactionDto(new AccountId(json.getAccountId()), createMoney(json),
-                TransactionDirection.create(trimWhitespace(json.getDirection())),
-                trimWhitespace(json.getDescription())
+    private static CreateNewTransactionDto toDto(CreateTransactionJson json) {
+        return new CreateNewTransactionDto(new AccountId(json.getAccountId()), createMoney(json),
+                trimWhitespace(json.getDescription()),
+                TransactionDirection.create(trimWhitespace(json.getDirection()))
         );
     }
 

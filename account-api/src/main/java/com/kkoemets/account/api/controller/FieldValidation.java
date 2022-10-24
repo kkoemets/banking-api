@@ -10,6 +10,7 @@ public class FieldValidation {
         public static final String COUNTRY_CODE = "^[A-Z]{2}\\z";
         public static final String CURRENCY = "^[A-Z]{3}\\z";
         public static final String TRANSACTION_AMOUNT = "^[0-9]*(\\.[0-9]{0,2})?$";
+        public static final String AMOUNT_MORE_THAN_ZERO = "^([0-9]*[1-9][0-9]*(\\.[0-9]+)?|[0]+\\.[0-9]*[1-9][0-9]*)";
         public static final String TRANSACTION_DIRECTION = "^(IN|OUT)$";
 
     }

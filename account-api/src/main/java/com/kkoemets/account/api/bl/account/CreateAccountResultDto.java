@@ -6,5 +6,5 @@ import com.kkoemets.domain.id.CustomerId;
 
 import java.util.List;
 
-public record InitializeCreateAccountResult(AccountId accountId, CustomerId customerId, List<Money> balances) {
+public record CreateAccountResultDto(AccountId accountId, CustomerId customerId, List<Money> balances) {
 }

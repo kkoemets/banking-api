@@ -13,12 +13,8 @@ public class AccountService {
     @Autowired
     private AccountDao dao;
 
-    public AccountId getNextSeqValue() {
-        return dao.getNextSeqValue();
-    }
-
-    public void add(AddAccountDto dto) {
-        dao.add(dto, ACTIVE);
+    public AccountId add(AddAccountDto dto) {
+        return dao.add(dto, ACTIVE);
     }
 
     public boolean exists(AccountId accountId) {

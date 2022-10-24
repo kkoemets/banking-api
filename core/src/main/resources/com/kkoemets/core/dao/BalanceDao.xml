@@ -12,7 +12,7 @@
           AND COALESCE(valid_to_timestamp, 'infinity'::TIMESTAMP) > CURRENT_TIMESTAMP
     </select>
 
-    <insert id="insertBalances">
+    <select id="insertBalances" resultType="com.kkoemets.domain.balance.Money">
         INSERT INTO core.balance (bala_id, acco_id, amount, ccy)
         VALUES
         <foreach collection="currencies" open="(" item="currency" separator="),(" close=")">
@@ -21,20 +21,23 @@
             #{amount},
             #{currency}
         </foreach>
-    </insert>
+        RETURNING amount AS "amount", ccy AS "currency"
+    </select>
 
-    <update id="increase">
+    <select id="increase" resultType="com.kkoemets.domain.balance.Money">
         UPDATE core.balance
         SET amount = amount + #{byAmount.amount}
         WHERE acco_id = #{accountId}
           AND ccy = #{byAmount.currency}
-    </update>
+        RETURNING amount AS "amount", ccy AS "currency"
+    </select>
 
-    <update id="decrease">
+    <select id="decrease" resultType="com.kkoemets.domain.balance.Money">
         UPDATE core.balance
         SET amount = amount - #{byAmount.amount}
         WHERE acco_id = #{accountId}
           AND ccy = #{byAmount.currency}
-    </update>
+        RETURNING amount AS "amount", ccy AS "currency"
+    </select>
 
 </mapper>

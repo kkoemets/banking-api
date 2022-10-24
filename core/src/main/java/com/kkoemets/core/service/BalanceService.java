@@ -24,20 +24,16 @@ public class BalanceService {
         return dao.findBalance(accountId, currency);
     }
 
-    public void insert(AccountId accountId, List<Currency> currencies) {
-        dao.insertBalances(accountId, DEFAULT_AMOUNT, currencies);
+    public List<Money> insert(AccountId accountId, List<Currency> currencies) {
+        return dao.insertBalances(accountId, DEFAULT_AMOUNT, currencies);
     }
 
-    public void increase(AccountId accountId, Money byAmount) {
-        if (dao.increase(accountId, byAmount) < 1) {
-            throw new FailedUpdateException();
-        }
+    public Money increase(AccountId accountId, Money byAmount) {
+        return dao.increase(accountId, byAmount);
     }
 
-    public void decrease(AccountId accountId, Money byAmount) {
-        if (dao.decrease(accountId, byAmount) < 1) {
-            throw new FailedUpdateException();
-        }
+    public Money decrease(AccountId accountId, Money byAmount) {
+        return dao.decrease(accountId, byAmount);
     }
 
 }

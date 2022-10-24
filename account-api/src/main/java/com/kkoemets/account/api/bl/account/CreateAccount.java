@@ -1,10 +1,10 @@
 package com.kkoemets.account.api.bl.account;
 
 import com.kkoemets.account.api.exception.BadRequestException;
-import com.kkoemets.core.amqp.message.CreateAccountMessage;
-import com.kkoemets.core.amqp.queue.CreateAccountQueue;
 import com.kkoemets.core.service.AccountService;
+import com.kkoemets.core.service.AddAccountDto;
 import com.kkoemets.core.service.AllowedCurrencyService;
+import com.kkoemets.core.service.BalanceService;
 import com.kkoemets.domain.balance.Money;
 import com.kkoemets.domain.codes.CountryIsoCode2;
 import com.kkoemets.domain.codes.Currency;
@@ -18,24 +18,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.kkoemets.account.api.exception.ExceptionMessage.ERROR_DISALLOWED_CURRENCIES;
-import static com.kkoemets.account.api.exception.ExceptionMessage.ERROR_DUPLICATE_CURRENCIES;
-import static java.util.stream.Collectors.toList;
+import static com.kkoemets.account.api.exception.AccountApiExceptionMessage.ERROR_DISALLOWED_CURRENCIES;
+import static com.kkoemets.account.api.exception.AccountApiExceptionMessage.ERROR_DUPLICATE_CURRENCIES;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
-public class InitializeCreateAccount {
-    private static final Logger log = getLogger(InitializeCreateAccount.class);
+public class CreateAccount {
+    private static final Logger log = getLogger(CreateAccount.class);
 
     @Autowired
     private AccountService accounts;
     @Autowired
-    private CreateAccountQueue createAccountQueue;
+    private BalanceService balances;
     @Autowired
     private AllowedCurrencyService allowedCurrencies;
 
     @Transactional
-    public InitializeCreateAccountResult initialize(InitializeCreateAccountDto dto) {
+    public CreateAccountResultDto create(CreateAccountDto dto) {
         CustomerId customerId = dto.customerId();
         List<Currency> currencies = dto.currencies();
         CountryIsoCode2 country = dto.country();
@@ -43,15 +42,13 @@ public class InitializeCreateAccount {
 
         validate(currencies);
 
-        AccountId accountId = accounts.getNextSeqValue();
+        AccountId accountId = accounts.add(new AddAccountDto(dto.customerId(), dto.country()));
+        log.info("Created account-{}", accountId);
 
-        createAccountQueue.send(new CreateAccountMessage(accountId, customerId, currencies, country));
+        List<Money> createdBalances = balances.insert(accountId, dto.currencies());
 
-        return new InitializeCreateAccountResult(accountId, customerId,
-                currencies
-                        .stream()
-                        .map(Money::zero)
-                        .collect(toList()));
+        log.info("Account created");
+        return new CreateAccountResultDto(accountId, customerId, createdBalances);
     }
 
     private void validate(List<Currency> currencies) {
@@ -72,10 +69,6 @@ public class InitializeCreateAccount {
 
     private boolean hasDuplicates(List<Currency> currencies) {
         return currencies.size() > 1 && new HashSet<>(currencies).size() != currencies.size();
-    }
-
-    void setCreateAccountQueue(CreateAccountQueue createAccountQueue) {
-        this.createAccountQueue = createAccountQueue;
     }
 
 }

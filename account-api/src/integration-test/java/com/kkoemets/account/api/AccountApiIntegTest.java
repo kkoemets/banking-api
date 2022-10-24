@@ -1,8 +1,12 @@
 package com.kkoemets.account.api;
 
-import com.kkoemets.core.bl.account.CreateAccount;
-import com.kkoemets.core.bl.account.CreateAccountDto;
-import com.kkoemets.core.service.AccountService;
+import com.kkoemets.account.api.bl.account.CreateAccount;
+import com.kkoemets.account.api.bl.account.CreateAccountDto;
+import com.kkoemets.account.api.bl.transaction.CreateNewTransaction;
+import com.kkoemets.account.api.bl.transaction.CreateNewTransactionDto;
+import com.kkoemets.account.api.bl.transaction.CreateNewTransactionResultDto;
+import com.kkoemets.domain.balance.Money;
+import com.kkoemets.domain.codes.TransactionDirection;
 import com.kkoemets.domain.id.AccountId;
 import com.kkoemets.domain.id.CustomerId;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +15,8 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.sql.DataSource;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,9 +27,11 @@ import static com.kkoemets.domain.codes.Currency.EUR;
 public abstract class AccountApiIntegTest {
 
     @Autowired
-    private AccountService accounts;
-    @Autowired
     private CreateAccount createAccount;
+    @Autowired
+    private CreateNewTransaction createNewTransaction;
+    @Autowired
+    private DataSource dataSource;
 
     @BeforeEach
     public void beforeEach(TestInfo info) {
@@ -39,9 +47,20 @@ public abstract class AccountApiIntegTest {
     }
 
     protected AccountId createAccount() {
-        AccountId accountId = accounts.getNextSeqValue();
-        createAccount.create(new CreateAccountDto(accountId, new CustomerId(1L), List.of(EUR), EE));
-        return accountId;
+        return createAccount.create(new CreateAccountDto(new CustomerId(1L), List.of(EUR), EE)).accountId();
+    }
+
+    protected CreateNewTransactionResultDto createNewTransaction(Money amount, TransactionDirection direction) {
+        return createNewTransaction.create(
+                new CreateNewTransactionDto(createAccount(), amount, "test_description", direction));
+    }
+
+    protected void runQuery(String sql) {
+        try (Statement statement = dataSource.getConnection().createStatement()) {
+            statement.execute(sql);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

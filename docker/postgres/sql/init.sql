@@ -161,7 +161,6 @@ CREATE TABLE core.transaction
     ccy                 VARCHAR(3)               NOT NULL,
     direction           VARCHAR(3)               NOT NULL,
     description         VARCHAR(140)             NOT NULL,
-    status              VARCHAR(3)               NOT NULL,
     inserted_timestamp  TIMESTAMP WITH TIME ZONE NOT NULL,
 
     created_timestamp   TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -181,7 +180,6 @@ CREATE TABLE core_audit.transaction_audit
     ccy                 VARCHAR(3),
     direction           VARCHAR(3),
     description         VARCHAR(140),
-    status              VARCHAR(3),
     inserted_timestamp  TIMESTAMP WITH TIME ZONE,
 
     created_timestamp   TIMESTAMP WITH TIME ZONE,

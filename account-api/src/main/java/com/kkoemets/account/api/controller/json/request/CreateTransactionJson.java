@@ -3,7 +3,6 @@ package com.kkoemets.account.api.controller.json.request;
 import javax.validation.constraints.*;
 
 import static com.kkoemets.account.api.controller.FieldValidation.*;
-import static com.kkoemets.account.api.controller.FieldValidation.Regex.TRANSACTION_DIRECTION;
 import static com.kkoemets.account.api.controller.ValidationMessage.*;
 
 public class CreateTransactionJson {
@@ -12,12 +11,13 @@ public class CreateTransactionJson {
     private Long accountId;
     @NotBlank(message = FIELD_MANDATORY)
     @Pattern(regexp = Regex.TRANSACTION_AMOUNT, message = FIELD_INVALID_VALUE)
+    @Pattern(regexp = Regex.AMOUNT_MORE_THAN_ZERO, message = FIELD_MUST_BE_MORE_THAN_ZERO)
     private String amount;
     @NotBlank(message = FIELD_MANDATORY)
     @Pattern(regexp = Regex.CURRENCY, message = FIELD_INVALID_VALUE)
     private String currency;
     @NotBlank(message = FIELD_MANDATORY)
-    @Pattern(regexp = TRANSACTION_DIRECTION, message = FIELD_INVALID_VALUE)
+    @Pattern(regexp = Regex.TRANSACTION_DIRECTION, message = FIELD_INVALID_VALUE)
     private String direction;
     @NotBlank(message = FIELD_MANDATORY)
     @Size(max = DESCRIPTION_LENGTH, message = FIELD_INVALID_TOO_LONG)

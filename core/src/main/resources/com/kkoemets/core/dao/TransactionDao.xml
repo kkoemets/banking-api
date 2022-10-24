@@ -3,21 +3,18 @@
 
 <mapper namespace="com.kkoemets.core.dao.TransactionDao">
 
-    <select id="getNextSeqValue" resultType="com.kkoemets.domain.id.TransactionId">
-        SELECT NEXTVAL('core.tran_seq')
-    </select>
-
     <select id="exists" resultType="boolean">
         SELECT EXISTS(SELECT tran_id
                       FROM core.transaction
                       WHERE tran_id = #{transactionId})
     </select>
 
-    <insert id="add">
-        INSERT INTO core.transaction (tran_id, acco_id, amount, ccy, direction, description, status, inserted_timestamp)
-        VALUES (#{dto.transactionId}, #{dto.accountId}, #{dto.amount.amount}, #{dto.amount.currency},
-                #{dto.direction}, #{dto.description}, #{status}, CURRENT_TIMESTAMP)
-    </insert>
+    <select id="add" resultType="com.kkoemets.domain.id.TransactionId">
+        INSERT INTO core.transaction (tran_id, acco_id, amount, ccy, direction, description, inserted_timestamp)
+        VALUES (NEXTVAL('core.tran_seq'), #{dto.accountId}, #{dto.amount.amount}, #{dto.amount.currency},
+                #{dto.direction}, #{dto.description}, CURRENT_TIMESTAMP)
+        RETURNING tran_id
+    </select>
 
     <select id="findAmount" resultType="com.kkoemets.domain.balance.Money">
         SELECT amount AS "amount", ccy AS "currency"
@@ -31,28 +28,10 @@
         WHERE tran_id = #{transactionId}
     </select>
 
-    <select id="findStatus" resultType="com.kkoemets.domain.codes.TransactionStatus">
-        SELECT status
-        FROM core.transaction
-        WHERE tran_id = #{transactionId}
-    </select>
-
     <select id="findDescription" resultType="java.lang.String">
         SELECT description
         FROM core.transaction
         WHERE tran_id = #{transactionId}
     </select>
-
-    <select id="findAccountId" resultType="com.kkoemets.domain.id.AccountId">
-        SELECT acco_id
-        FROM core.transaction
-        WHERE tran_id = #{transactionId}
-    </select>
-
-    <update id="setStatus">
-        UPDATE core.transaction
-        SET status = #{status}
-        WHERE tran_id = #{transactionId}
-    </update>
 
 </mapper>

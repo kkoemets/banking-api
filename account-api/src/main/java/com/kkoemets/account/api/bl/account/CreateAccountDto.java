@@ -6,5 +6,5 @@ import com.kkoemets.domain.id.CustomerId;
 
 import java.util.List;
 
-public record InitializeCreateAccountDto(CustomerId customerId, List<Currency> currencies, CountryIsoCode2 country) {
+public record CreateAccountDto(CustomerId customerId, List<Currency> currencies, CountryIsoCode2 country) {
 }

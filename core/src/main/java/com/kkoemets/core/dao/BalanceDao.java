@@ -16,14 +16,14 @@ public interface BalanceDao {
     Optional<Money> findBalance(@Param("accountId") AccountId accountId,
                                 @Param("currency") Currency currency);
 
-    void insertBalances(@Param("accountId") AccountId accountId,
-                        @Param("amount") BigDecimal amount,
-                        @Param("currencies") List<Currency> currencies);
+    List<Money> insertBalances(@Param("accountId") AccountId accountId,
+                               @Param("amount") BigDecimal amount,
+                               @Param("currencies") List<Currency> currencies);
 
-    int increase(@Param("accountId") AccountId accountId,
-                 @Param("byAmount") Money byAmount);
+    Money increase(@Param("accountId") AccountId accountId,
+                   @Param("byAmount") Money byAmount);
 
-    int decrease(@Param("accountId") AccountId accountId,
-                 @Param("byAmount") Money byAmount);
+    Money decrease(@Param("accountId") AccountId accountId,
+                   @Param("byAmount") Money byAmount);
 
 }

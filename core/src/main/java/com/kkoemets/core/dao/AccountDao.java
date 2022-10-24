@@ -9,9 +9,8 @@ import org.apache.ibatis.annotations.Param;
 @CoreDao
 public interface AccountDao {
 
-    AccountId getNextSeqValue();
-
-    void add(@Param("dto") AddAccountDto dto, @Param("status") AccountStatus status);
+    AccountId add(@Param("dto") AddAccountDto dto,
+                  @Param("status") AccountStatus status);
 
     boolean exists(@Param("accountId") AccountId accountId);
 

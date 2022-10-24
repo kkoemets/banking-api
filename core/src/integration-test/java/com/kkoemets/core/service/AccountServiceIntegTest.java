@@ -8,7 +8,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.kkoemets.domain.codes.CountryIsoCode2.EE;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 public class AccountServiceIntegTest extends CoreIntegTest {
@@ -17,15 +16,10 @@ public class AccountServiceIntegTest extends CoreIntegTest {
     private AccountService service = new AccountService();
 
     @Test
-    public void shouldReturnAccountId() {
-        assertNotNull(service.getNextSeqValue());
-    }
-
-    @Test
     @Transactional
     @Rollback(value = false)
     public void shouldExecute() {
-        service.add(new AddAccountDto(service.getNextSeqValue(), new CustomerId(1L), EE));
+        service.add(new AddAccountDto(new CustomerId(1L), EE));
     }
 
 }

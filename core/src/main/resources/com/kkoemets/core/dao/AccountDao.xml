@@ -3,14 +3,11 @@
 
 <mapper namespace="com.kkoemets.core.dao.AccountDao">
 
-    <select id="getNextSeqValue" resultType="com.kkoemets.domain.id.AccountId">
-        SELECT NEXTVAL('core.acco_seq');
-    </select>
-
-    <insert id="add">
+    <select id="add" resultType="com.kkoemets.domain.id.AccountId">
         INSERT INTO core.account (acco_id, cust_id, status_code, country, inserted_timestamp)
-        VALUES (#{dto.accountId}, #{dto.customerId}, #{status}, #{dto.country}, CURRENT_TIMESTAMP)
-    </insert>
+        VALUES (NEXTVAL('core.acco_seq'), #{dto.customerId}, #{status}, #{dto.country}, CURRENT_TIMESTAMP)
+        RETURNING acco_id
+    </select>
 
     <select id="exists" resultType="boolean">
         SELECT EXISTS(SELECT acco_id

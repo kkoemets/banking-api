@@ -1,8 +1,8 @@
 package com.kkoemets.account.api.jsonconsumer;
 
-import com.kkoemets.account.api.bl.account.InitializeCreateAccount;
-import com.kkoemets.account.api.bl.account.InitializeCreateAccountDto;
-import com.kkoemets.account.api.bl.account.InitializeCreateAccountResult;
+import com.kkoemets.account.api.bl.account.CreateAccount;
+import com.kkoemets.account.api.bl.account.CreateAccountDto;
+import com.kkoemets.account.api.bl.account.CreateAccountResultDto;
 import com.kkoemets.account.api.controller.json.request.CreateAccountJson;
 import com.kkoemets.domain.codes.CountryIsoCode2;
 import com.kkoemets.domain.codes.Currency;
@@ -23,14 +23,14 @@ public class CreateAccountJsonConsumer {
     private static final Logger log = getLogger(CreateAccountJsonConsumer.class);
 
     @Autowired
-    private InitializeCreateAccount initializeCreateAccount;
+    private CreateAccount createAccount;
 
-    public ResponseEntity<?> create(CreateAccountJson json) {
+    public ResponseEntity<Map<String, Object>> create(CreateAccountJson json) {
         log.info("Received request to initialize a new account");
-        return ok(toResponse(initializeCreateAccount.initialize(toDto(json))));
+        return ok(toResponse(createAccount.create(toDto(json))));
     }
 
-    private Map<String, Object> toResponse(InitializeCreateAccountResult result) {
+    private Map<String, Object> toResponse(CreateAccountResultDto result) {
         return Map.of(
                 "accountId", result.accountId().getValue(),
                 "customerId", result.customerId().getValue(),
@@ -43,8 +43,8 @@ public class CreateAccountJsonConsumer {
         );
     }
 
-    private InitializeCreateAccountDto toDto(CreateAccountJson json) {
-        return new InitializeCreateAccountDto(
+    private CreateAccountDto toDto(CreateAccountJson json) {
+        return new CreateAccountDto(
                 new CustomerId(json.getCustomerId()),
                 json.getCurrencies()
                         .stream()
