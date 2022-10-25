@@ -31,11 +31,11 @@ public class CreateTransactionJsonConsumer {
         return ok(Map.of(
                 "accountId", resultDto.accountId(),
                 "transactionId", resultDto.transactionId(),
-                "amount", transactionAmount.amount(),
+                "amount", transactionAmount.amount().toPlainString(),
                 "currency", transactionAmount.currency(),
                 "direction", dto.direction(),
                 "description", dto.description(),
-                "balance", resultDto.newBalance().amount()
+                "balance", resultDto.newBalance().amount().toPlainString()
         ));
     }
 

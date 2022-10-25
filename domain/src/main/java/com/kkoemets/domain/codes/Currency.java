@@ -6,6 +6,8 @@ public class Currency extends StringValue {
     private static final int CURRENCY_LENGTH = 3;
     public static final Currency EUR = create("EUR");
     public static final Currency USD = create("USD");
+    public static final Currency GBP = create("GBP");
+    public static final Currency SEK = create("SEK");
 
     private Currency(String currency) {
         super(currency);

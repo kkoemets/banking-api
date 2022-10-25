@@ -66,6 +66,14 @@ sourceSets {
     }
 }
 
+task restTest(type: Test) {
+    useJUnitPlatform()
+    group = 'verification'
+    testClassesDirs = sourceSets.restTest.output.classesDirs
+    classpath = sourceSets.restTest.runtimeClasspath
+    outputs.upToDateWhen { false }
+}
+
 configurations {
     integrationTestImplementation.extendsFrom implementation
     integrationTestImplementation.extendsFrom testImplementation

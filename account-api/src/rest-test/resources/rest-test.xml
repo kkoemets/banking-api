@@ -7,6 +7,10 @@
                 http://www.springframework.org/schema/context
                 http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     <context:property-placeholder location="classpath*:application.properties"/>
-    <!--    <beans:import resource="classpath:main-context.xml"/>-->
+
+    <beans:bean id="objectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+        <beans:property name="modulesToInstall"
+                        value="com.kkoemets.domain.serialization.SerializerModule"/>
+    </beans:bean>
 
 </beans:beans>

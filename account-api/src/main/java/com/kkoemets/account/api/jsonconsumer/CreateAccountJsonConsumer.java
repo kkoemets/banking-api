@@ -37,7 +37,7 @@ public class CreateAccountJsonConsumer {
                 "balances", result.balances()
                         .stream()
                         .map(balance -> Map.of(
-                                "amount", balance.amount(),
+                                "amount", balance.amount().toPlainString(),
                                 "currency", balance.currency().getValue()))
                         .collect(toList())
         );
