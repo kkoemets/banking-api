@@ -34,7 +34,8 @@
 
     <beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <beans:property name="dataSource" ref="dataSource"/>
-        <beans:property name="mapperLocations" value="classpath*:com/kkoemets/core/dao/*.xml"/>
+        <beans:property name="mapperLocations"
+                        value="classpath*:com/kkoemets/core/dao/*.xml, classpath*:com/kkoemets/account/api/query/dao/*.xml"/>
         <beans:property name="typeHandlersPackage"
                         value="com.kkoemets.domain.mybatis.typehandlers"/>
     </beans:bean>
@@ -42,6 +43,12 @@
     <beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <beans:property name="annotationClass" value="com.kkoemets.core.mybatis.annotation.CoreDao"/>
         <beans:property name="basePackage" value="com.kkoemets.core.dao"/>
+        <beans:property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </beans:bean>
+
+    <beans:bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <beans:property name="annotationClass" value="com.kkoemets.account.api.mybatis.annotation.AccountApiQueryDao"/>
+        <beans:property name="basePackage" value="com.kkoemets.account.api.query.dao"/>
         <beans:property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </beans:bean>
 

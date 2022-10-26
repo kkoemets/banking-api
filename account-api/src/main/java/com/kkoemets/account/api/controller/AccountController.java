@@ -4,6 +4,8 @@ import com.kkoemets.account.api.controller.json.request.CreateAccountJson;
 import com.kkoemets.account.api.controller.json.request.CreateTransactionJson;
 import com.kkoemets.account.api.jsonconsumer.CreateAccountJsonConsumer;
 import com.kkoemets.account.api.jsonconsumer.CreateTransactionJsonConsumer;
+import com.kkoemets.account.api.jsonconsumer.FindAccountConsumer;
+import com.kkoemets.domain.id.AccountId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -25,9 +27,16 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class AccountController {
 
     @Autowired
+    private FindAccountConsumer findAccountConsumer;
+    @Autowired
     private CreateAccountJsonConsumer createAccount;
     @Autowired
     private CreateTransactionJsonConsumer createTransaction;
+
+    @GetMapping("/api/v1/accounts/{accountId}")
+    public ResponseEntity<?> findAccount(@PathVariable AccountId accountId) {
+        return findAccountConsumer.find(accountId);
+    }
 
     @PostMapping("/api/v1/accounts")
     public ResponseEntity<?> createAccount(@RequestBody @Valid CreateAccountJson json) {

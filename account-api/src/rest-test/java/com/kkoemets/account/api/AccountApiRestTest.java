@@ -44,4 +44,22 @@ public abstract class AccountApiRestTest {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    protected Map<String, Object> get(String url) {
+        log.info("Request to-{}", url);
+        String response = WebClient.create()
+                .get()
+                .uri("%s%s".formatted(HOST, url))
+                .header(CONTENT_TYPE, APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+        log.info("Response-{}", response);
+        try {
+            return objectMapper.readValue(response, Map.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

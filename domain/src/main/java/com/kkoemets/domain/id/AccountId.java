@@ -6,4 +6,8 @@ public class AccountId extends Id<AccountId> {
         super(value);
     }
 
+    public AccountId(String value) {
+        super(Long.valueOf(value));
+    }
+
 }

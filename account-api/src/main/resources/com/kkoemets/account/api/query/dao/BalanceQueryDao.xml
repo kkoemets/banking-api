@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kkoemets.account.api.query.dao.BalanceQueryDao">
+
+    <resultMap id="findBalancesResultMap" type="com.kkoemets.account.api.query.dao.FindBalanceQueryResultDto">
+        <id property="accountId" column="accountId"/>
+        <association property="amount" javaType="com.kkoemets.domain.balance.Money">
+            <constructor>
+                <arg column="amount" javaType="String"/>
+                <arg column="currency" javaType="com.kkoemets.domain.codes.Currency"/>
+            </constructor>
+        </association>
+    </resultMap>
+
+    <select id="findBalances" resultMap="findBalancesResultMap">
+        SELECT acco_id AS "accountId",
+               amount  AS "amount",
+               ccy     AS "currency"
+        FROM core.balance
+        WHERE acco_id = #{accountId}
+          AND COALESCE(valid_to_timestamp, 'infinity'::TIMESTAMP) > CURRENT_TIMESTAMP
+    </select>
+
+</mapper>

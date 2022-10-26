@@ -7,13 +7,15 @@ import com.kkoemets.account.api.AccountApi;
 import com.kkoemets.account.api.AccountApiIntegTest;
 import com.kkoemets.account.api.controller.json.request.CreateAccountJson;
 import com.kkoemets.account.api.controller.json.request.CreateTransactionJson;
-import org.assertj.core.api.AbstractComparableAssert;
 import org.assertj.core.api.Condition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -23,6 +25,7 @@ import java.util.function.Supplier;
 import static java.util.Objects.nonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
@@ -48,8 +51,13 @@ abstract class AccountControllerIntegTest extends AccountApiIntegTest {
         return post("/api/v1/transactions", json);
     }
 
-    protected AbstractComparableAssert<?, HttpStatus> assertThatHttp200(Supplier<ResponseEntity<?>> apiCall) {
-        return assertThat(apiCall.get().getStatusCode()).is(new Condition<>(s -> s == OK, "HTTP 200"));
+    protected void assertThatHttp200(Supplier<ResponseEntity<?>> apiCall) {
+        assertThat(apiCall.get().getStatusCode()).is(new Condition<>(s -> s == OK, "HTTP 200"));
+    }
+
+    protected void assertThatHttp404(Supplier<ResponseEntity<?>> apiCall) {
+        ResponseEntity<?> response = apiCall.get();
+        assertThat(response.getStatusCode()).is(new Condition<>(s -> s == NOT_FOUND, "HTTP 404"));
     }
 
     private ResponseEntity<String> post(String url, Object json) {
@@ -62,6 +70,14 @@ abstract class AccountControllerIntegTest extends AccountApiIntegTest {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected ResponseEntity<String> get(String url) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(APPLICATION_JSON);
+
+        return restTemplate.exchange(formatUrl(url),
+                HttpMethod.GET, new HttpEntity<>(headers), String.class);
     }
 
     private String formatUrl(String x) {
