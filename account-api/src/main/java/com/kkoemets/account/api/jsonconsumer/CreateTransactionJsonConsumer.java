@@ -23,8 +23,8 @@ public class CreateTransactionJsonConsumer {
     @Autowired
     private CreateNewTransaction createNewTransaction;
 
-    public ResponseEntity<Map<String, Object>> create(CreateTransactionJson json) {
-        CreateNewTransactionDto dto = toDto(json);
+    public ResponseEntity<Map<String, Object>> create(AccountId accountId, CreateTransactionJson json) {
+        CreateNewTransactionDto dto = toDto(accountId, json);
         CreateNewTransactionResultDto resultDto = createNewTransaction.create(dto);
 
         Money transactionAmount = dto.amount();
@@ -39,8 +39,8 @@ public class CreateTransactionJsonConsumer {
         ));
     }
 
-    private static CreateNewTransactionDto toDto(CreateTransactionJson json) {
-        return new CreateNewTransactionDto(new AccountId(json.getAccountId()), createMoney(json),
+    private static CreateNewTransactionDto toDto(AccountId accountId, CreateTransactionJson json) {
+        return new CreateNewTransactionDto(accountId, createMoney(json),
                 trimWhitespace(json.getDescription()),
                 TransactionDirection.create(trimWhitespace(json.getDirection()))
         );

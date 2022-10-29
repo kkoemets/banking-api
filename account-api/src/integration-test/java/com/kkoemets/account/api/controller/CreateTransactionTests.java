@@ -26,14 +26,15 @@ public class CreateTransactionTests extends AccountControllerIntegTest {
 
     @Test
     public void successfullyCreateOutgoingTransaction() {
+        AccountId accountId = createAccount();
         CreateTransactionJson json = createJson(OUT);
-        increaseBalance.increase(new AccountId(json.getAccountId()), new Money(BigDecimal.TEN, Currency.create(json.getCurrency())));
-        assertThatHttp200(() -> postCreateTransaction(json));
+        increaseBalance.increase(accountId, new Money(BigDecimal.TEN, Currency.create(json.getCurrency())));
+        assertThatHttp200(() -> createTransaction(accountId, json));
     }
 
     @Test
     public void successfullyCreateIncomingTransaction() {
-        assertThatHttp200(() -> postCreateTransaction(createJson(IN)));
+        assertThatHttp200(() -> createTransaction(createAccount(), createJson(IN)));
     }
 
     @Test
@@ -58,22 +59,6 @@ public class CreateTransactionTests extends AccountControllerIntegTest {
         json.setDirection("A");
 
         assertFieldValidationError(json, "direction", FIELD_INVALID_VALUE);
-    }
-
-    @Test
-    public void failsIfInvalidAccountId_null() {
-        CreateTransactionJson json = createJson(IN);
-        json.setAccountId(null);
-
-        assertFieldValidationError(json, "accountId", FIELD_MANDATORY);
-    }
-
-    @Test
-    public void failsIfInvalidAccountId_negative() {
-        CreateTransactionJson json = createJson(IN);
-        json.setAccountId(-1L);
-
-        assertFieldValidationError(json, "accountId", FIELD_INVALID_VALUE);
     }
 
     @Test
@@ -176,13 +161,13 @@ public class CreateTransactionTests extends AccountControllerIntegTest {
         assertFieldValidationError(json, "description", FIELD_INVALID_TOO_LONG);
     }
 
-    private void assertFieldValidationError(CreateTransactionJson json, String currencies, String message) {
-        assertFieldValidationError(() -> postCreateTransaction(json), currencies, message);
+    private void assertFieldValidationError(CreateTransactionJson json, String currencies,
+                                            String message) {
+        assertFieldValidationError(() -> createTransaction(createAccount(), json), currencies, message);
     }
 
     private CreateTransactionJson createJson(TransactionDirection direction) {
         CreateTransactionJson json = new CreateTransactionJson();
-        json.setAccountId(createAccount().getValue());
         json.setAmount("1.00");
         json.setCurrency(EUR.getValue());
         json.setDirection(direction.getCode());

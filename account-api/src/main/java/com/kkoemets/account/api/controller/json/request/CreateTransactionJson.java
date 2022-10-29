@@ -1,14 +1,14 @@
 package com.kkoemets.account.api.controller.json.request;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
-import static com.kkoemets.account.api.controller.FieldValidation.*;
+import static com.kkoemets.account.api.controller.FieldValidation.DESCRIPTION_LENGTH;
+import static com.kkoemets.account.api.controller.FieldValidation.Regex;
 import static com.kkoemets.account.api.controller.ValidationMessage.*;
 
 public class CreateTransactionJson {
-    @NotNull(message = FIELD_MANDATORY)
-    @Min(value = MIN_ACCOUNT_ID, message = FIELD_INVALID_VALUE)
-    private Long accountId;
     @NotBlank(message = FIELD_MANDATORY)
     @Pattern(regexp = Regex.TRANSACTION_AMOUNT, message = FIELD_INVALID_VALUE)
     @Pattern(regexp = Regex.AMOUNT_MORE_THAN_ZERO, message = FIELD_MUST_BE_MORE_THAN_ZERO)
@@ -22,14 +22,6 @@ public class CreateTransactionJson {
     @NotBlank(message = FIELD_MANDATORY)
     @Size(max = DESCRIPTION_LENGTH, message = FIELD_INVALID_TOO_LONG)
     private String description;
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
 
     public String getAmount() {
         return amount;

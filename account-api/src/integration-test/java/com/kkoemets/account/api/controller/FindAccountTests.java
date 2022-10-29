@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
+import static com.kkoemets.account.api.utils.UrlUtil.replace;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,16 +21,16 @@ public class FindAccountTests extends AccountControllerIntegTest {
     @Test
     public void successfullyFindAccount() {
         AccountId accountId = createAccount();
-        assertThatHttp200(() -> get("/api/v1/accounts/{accountId}"
-                .replace("{accountId}", accountId.getValue().toString())));
+        assertThatHttp200(() -> get(replace("/api/v1/accounts/{accountId}",
+                accountId.getValue().toString())));
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void correctResponseData() throws Exception {
         AccountId accountId = createAccount();
-        ResponseEntity<String> response = get("/api/v1/accounts/{accountId}"
-                .replace("{accountId}", accountId.getValue().toString()));
+        ResponseEntity<String> response = get(replace("/api/v1/accounts/{accountId}",
+                accountId.getValue().toString()));
         Map<String, Object> json = objectMapper.readValue(response.getBody(), Map.class);
         assertNotNull(json.get("customerId"));
         assertThat(json.get("accountId").toString(), is(accountId.getValue().toString()));

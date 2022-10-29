@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.kkoemets.account.api.utils.UrlUtil.replace;
 import static com.kkoemets.domain.codes.CountryIsoCode2.EE;
 import static com.kkoemets.domain.codes.Currency.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -25,8 +26,8 @@ public class FindAccountConsumerRestTest extends AccountApiRestTest {
                 )
         );
 
-        Map<String, Object> foundData = get("/api/v1/accounts/{accountId}"
-                .replace("{accountId}", accountCreation.get("accountId").toString()));
+        Map<String, Object> foundData = get(replace("/api/v1/accounts/{accountId}",
+                accountCreation.get("accountId").toString()));
 
         assertNotNull(foundData.get("accountId"));
         assertNotNull(foundData.get("customerId"));

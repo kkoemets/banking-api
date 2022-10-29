@@ -5,6 +5,7 @@ import com.kkoemets.account.api.controller.json.request.CreateTransactionJson;
 import com.kkoemets.account.api.jsonconsumer.CreateAccountJsonConsumer;
 import com.kkoemets.account.api.jsonconsumer.CreateTransactionJsonConsumer;
 import com.kkoemets.account.api.jsonconsumer.FindAccountConsumer;
+import com.kkoemets.account.api.jsonconsumer.FindTransactionsConsumer;
 import com.kkoemets.domain.id.AccountId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,15 +28,17 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class AccountController {
 
     @Autowired
-    private FindAccountConsumer findAccountConsumer;
+    private FindAccountConsumer findAccount;
     @Autowired
     private CreateAccountJsonConsumer createAccount;
+    @Autowired
+    private FindTransactionsConsumer findTransactions;
     @Autowired
     private CreateTransactionJsonConsumer createTransaction;
 
     @GetMapping("/api/v1/accounts/{accountId}")
     public ResponseEntity<?> findAccount(@PathVariable AccountId accountId) {
-        return findAccountConsumer.find(accountId);
+        return findAccount.find(accountId);
     }
 
     @PostMapping("/api/v1/accounts")
@@ -43,9 +46,15 @@ public class AccountController {
         return createAccount.create(json);
     }
 
-    @PostMapping("/api/v1/transactions")
-    public ResponseEntity<?> createTransaction(@RequestBody @Valid CreateTransactionJson json) {
-        return createTransaction.create(json);
+    @GetMapping("/api/v1/accounts/{accountId}/transactions")
+    public ResponseEntity<?> findTransactions(@PathVariable AccountId accountId) {
+        return findTransactions.find(accountId);
+    }
+
+    @PostMapping("/api/v1/accounts/{accountId}/transactions")
+    public ResponseEntity<?> createTransaction(@PathVariable AccountId accountId,
+                                               @RequestBody @Valid CreateTransactionJson json) {
+        return createTransaction.create(accountId, json);
     }
 
     @ResponseStatus(BAD_REQUEST)

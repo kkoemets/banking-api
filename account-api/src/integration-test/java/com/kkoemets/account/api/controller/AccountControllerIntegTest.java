@@ -7,6 +7,7 @@ import com.kkoemets.account.api.AccountApi;
 import com.kkoemets.account.api.AccountApiIntegTest;
 import com.kkoemets.account.api.controller.json.request.CreateAccountJson;
 import com.kkoemets.account.api.controller.json.request.CreateTransactionJson;
+import com.kkoemets.domain.id.AccountId;
 import org.assertj.core.api.Condition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import static com.kkoemets.account.api.utils.UrlUtil.replace;
 import static java.util.Objects.nonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -47,8 +49,8 @@ abstract class AccountControllerIntegTest extends AccountApiIntegTest {
         return post("/api/v1/accounts", json);
     }
 
-    protected ResponseEntity<String> postCreateTransaction(CreateTransactionJson json) {
-        return post("/api/v1/transactions", json);
+    protected ResponseEntity<String> createTransaction(AccountId accountId, CreateTransactionJson json) {
+        return post(replace("/api/v1/accounts/{accountId}/transactions", accountId.getValue().toString()), json);
     }
 
     protected void assertThatHttp200(Supplier<ResponseEntity<?>> apiCall) {

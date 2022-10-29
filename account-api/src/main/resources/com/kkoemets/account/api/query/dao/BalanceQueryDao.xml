@@ -3,7 +3,7 @@
 
 <mapper namespace="com.kkoemets.account.api.query.dao.BalanceQueryDao">
 
-    <resultMap id="findBalancesResultMap" type="com.kkoemets.account.api.query.dao.FindBalanceQueryResultDto">
+    <resultMap id="findBalanceResultMap" type="com.kkoemets.account.api.query.dao.FindBalanceQueryResultDto">
         <id property="accountId" column="accountId"/>
         <association property="amount" javaType="com.kkoemets.domain.balance.Money">
             <constructor>
@@ -13,7 +13,7 @@
         </association>
     </resultMap>
 
-    <select id="findBalances" resultMap="findBalancesResultMap">
+    <select id="findBalances" resultMap="findBalanceResultMap">
         SELECT acco_id AS "accountId",
                amount  AS "amount",
                ccy     AS "currency"
