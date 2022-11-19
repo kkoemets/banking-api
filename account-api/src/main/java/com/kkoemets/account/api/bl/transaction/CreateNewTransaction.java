@@ -3,12 +3,15 @@ package com.kkoemets.account.api.bl.transaction;
 import com.kkoemets.account.api.bl.balance.DecreaseBalance;
 import com.kkoemets.account.api.bl.balance.IncreaseBalance;
 import com.kkoemets.account.api.exception.BadRequestException;
+import com.kkoemets.core.amqp.message.TransactionCreatedMessage;
+import com.kkoemets.core.amqp.queue.TransactionCreatedQueue;
 import com.kkoemets.core.service.AccountService;
 import com.kkoemets.core.service.AddTransactionDto;
 import com.kkoemets.core.service.TransactionService;
 import com.kkoemets.domain.balance.Money;
 import com.kkoemets.domain.codes.TransactionDirection;
 import com.kkoemets.domain.id.AccountId;
+import com.kkoemets.domain.id.TransactionId;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,6 +33,8 @@ public class CreateNewTransaction {
     private IncreaseBalance increaseBalance;
     @Autowired
     private DecreaseBalance decreaseBalance;
+    @Autowired
+    private TransactionCreatedQueue transactionCreatedQueue;
 
     @Transactional
     public CreateNewTransactionResultDto create(CreateNewTransactionDto dto) {
@@ -48,10 +53,12 @@ public class CreateNewTransaction {
                 ? decreaseBalance.decrease(accountId, transactionAmount)
                 : increaseBalance.increase(accountId, transactionAmount);
 
-        return new CreateNewTransactionResultDto(
-                transactions.add(
-                        new AddTransactionDto(accountId, transactionAmount, dto.description(), direction)),
-                accountId, newBalance);
+        TransactionId transactionId = transactions.add(
+                new AddTransactionDto(accountId, transactionAmount, dto.description(), direction));
+
+        transactionCreatedQueue.send(new TransactionCreatedMessage(transactionId));
+
+        return new CreateNewTransactionResultDto(transactionId, accountId, newBalance);
     }
 
 }

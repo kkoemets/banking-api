@@ -4,12 +4,12 @@ import com.kkoemets.account.api.AccountApiIntegTest;
 import com.kkoemets.account.api.exception.BadRequestException;
 import com.kkoemets.core.service.BalanceService;
 import com.kkoemets.domain.balance.Money;
-import com.kkoemets.domain.codes.Currency;
 import com.kkoemets.domain.id.AccountId;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.kkoemets.account.api.exception.AccountApiExceptionMessage.ERROR_BALANCE_IN_CURRENCY_DOES_NOT_EXIST;
+import static com.kkoemets.domain.codes.Currency.EUR;
 import static com.kkoemets.domain.codes.Currency.USD;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -26,7 +26,7 @@ public class IncreaseBalanceIntegTest extends AccountApiIntegTest {
     @Test
     public void increaseBalance() {
         AccountId accountId = createAccount();
-        Money amount = new Money("1.01", Currency.EUR);
+        Money amount = new Money("1.01", EUR);
         Money newBalance = increaseBalance.increase(accountId, amount);
 
         assertEquals(amount, newBalance);

@@ -1,6 +1,7 @@
 package com.kkoemets.daemon.listener;
 
 import com.kkoemets.core.amqp.message.AmqpMessage;
+import com.kkoemets.core.amqp.service.QueueMessageService;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
 import org.springframework.amqp.core.Message;

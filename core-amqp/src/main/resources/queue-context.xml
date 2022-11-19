@@ -32,4 +32,22 @@
         <constructor-arg name="jsonObjectMapper" ref="objectMapper"/>
     </bean>
 
+    <rabbit:queue id="account-created" name="account-created"/>
+    <rabbit:queue id="balance-changed" name="balance-changed"/>
+    <rabbit:queue id="transaction-created" name="transaction-created"/>
+
+    <rabbit:topic-exchange id="account-exchange" name="account-exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="account-created" pattern="account-created"/>
+            <rabbit:binding queue="balance-changed" pattern="balance-changed"/>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+
+    <rabbit:topic-exchange id="transaction-exchange" name="transaction-exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="transaction-created" pattern="transaction-created">
+            </rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+
 </beans>

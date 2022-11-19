@@ -1,6 +1,8 @@
 package com.kkoemets.account.api.bl.account;
 
 import com.kkoemets.account.api.exception.BadRequestException;
+import com.kkoemets.core.amqp.message.AccountCreatedMessage;
+import com.kkoemets.core.amqp.queue.AccountCreatedQueue;
 import com.kkoemets.core.service.AccountService;
 import com.kkoemets.core.service.AddAccountDto;
 import com.kkoemets.core.service.AllowedCurrencyService;
@@ -32,6 +34,8 @@ public class CreateAccount {
     private BalanceService balances;
     @Autowired
     private AllowedCurrencyService allowedCurrencies;
+    @Autowired
+    private AccountCreatedQueue accountCreatedQueue;
 
     @Transactional
     public CreateAccountResultDto create(CreateAccountDto dto) {
@@ -44,6 +48,7 @@ public class CreateAccount {
 
         AccountId accountId = accounts.add(new AddAccountDto(dto.customerId(), dto.country()));
         log.info("Created account-{}", accountId);
+        accountCreatedQueue.send(new AccountCreatedMessage(accountId));
 
         List<Money> createdBalances = balances.insert(accountId, dto.currencies());
 

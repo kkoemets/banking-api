@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kkoemets.core.amqp.dao.QueueMessageDao">
+
+    <insert id="add">
+        INSERT INTO core.queue_message (qume_id, queue_name, message_id, message, inserted_timestamp,
+                                        expiration_timestamp, skip)
+        VALUES (NEXTVAL('core.qume_seq'), #{dto.queueName}, #{dto.messageId}, #{dto.message}, CURRENT_TIMESTAMP,
+                #{dto.expiration}, FALSE)
+    </insert>
+
+</mapper>

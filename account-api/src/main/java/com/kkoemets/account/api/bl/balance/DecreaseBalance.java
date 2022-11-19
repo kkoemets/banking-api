@@ -1,6 +1,8 @@
 package com.kkoemets.account.api.bl.balance;
 
 import com.kkoemets.account.api.exception.BadRequestException;
+import com.kkoemets.core.amqp.message.BalanceChangedMessage;
+import com.kkoemets.core.amqp.queue.BalanceChangedQueue;
 import com.kkoemets.core.service.BalanceService;
 import com.kkoemets.domain.balance.Money;
 import com.kkoemets.domain.id.AccountId;
@@ -18,23 +20,33 @@ public class DecreaseBalance {
 
     @Autowired
     private BalanceService balances;
+    @Autowired
+    private BalanceChangedQueue balanceChangedQueue;
 
 
     public Money decrease(AccountId accountId, Money amount) {
         log.info("Decreasing balance");
 
-        balances.findBalance(accountId, amount.currency())
-                .ifPresentOrElse(balance -> {
+        Money currentBalance = balances.findBalance(accountId, amount.currency())
+                .map(balance -> {
                     if (balance.lessThan(amount)) {
                         log.warn("Not enough funds");
                         throw new BadRequestException(ERROR_NOT_ENOUGH_FUNDS);
                     }
-                }, () -> {
+
+                    return balance;
+                })
+                .orElseThrow(() -> {
                     log.warn("No balance in currency");
                     throw new BadRequestException(ERROR_BALANCE_IN_CURRENCY_DOES_NOT_EXIST);
                 });
 
-        return balances.decrease(accountId, amount);
+        Money balance = balances.decrease(accountId, amount);
+
+        balanceChangedQueue.send(new BalanceChangedMessage(accountId, currentBalance.amount(), balance.amount(),
+                balance.currency()));
+
+        return balance;
     }
 
 }

@@ -199,3 +199,48 @@ CREATE TRIGGER transaction_audit_trigger
     ON core.transaction
     FOR EACH ROW
 EXECUTE FUNCTION audit_trigger();
+
+CREATE TABLE core.queue_message
+(
+    qume_id              BIGINT PRIMARY KEY,
+    queue_name           VARCHAR(100)             NOT NULL,
+    message_id           VARCHAR(150)             NOT NULL,
+    message              VARCHAR(1000)            NOT NULL,
+    inserted_timestamp   TIMESTAMP WITH TIME ZONE NOT NULL,
+    expiration_timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
+    skip                 BOOLEAN                  NOT NULL,
+
+    created_timestamp    TIMESTAMP WITH TIME ZONE NOT NULL,
+    created_session_id   VARCHAR(255)             NOT NULL,
+    modified_timestamp   TIMESTAMP WITH TIME ZONE NOT NULL,
+    modified_session_id  VARCHAR(255)             NOT NULL
+);
+
+CREATE TABLE core_audit.queue_message_audit
+(
+    audit_timestamp      TIMESTAMP WITH TIME ZONE,
+    event                VARCHAR(6),
+
+    qume_id              BIGINT PRIMARY KEY,
+    queue_name           VARCHAR(100),
+    message_id           VARCHAR(150),
+    message              VARCHAR(1000),
+    inserted_timestamp   TIMESTAMP WITH TIME ZONE,
+    expiration_timestamp TIMESTAMP WITH TIME ZONE,
+    skip                 BOOLEAN,
+
+    created_timestamp    TIMESTAMP WITH TIME ZONE,
+    created_session_id   VARCHAR(255),
+    modified_timestamp   TIMESTAMP WITH TIME ZONE,
+    modified_session_id  VARCHAR(255)
+);
+
+CREATE SEQUENCE core.qume_seq AS
+    BIGINT INCREMENT BY 1
+    START WITH 1000;
+
+CREATE TRIGGER queue_message_trigger
+    BEFORE INSERT OR UPDATE OR DELETE
+    ON core.queue_message
+    FOR EACH ROW
+EXECUTE FUNCTION audit_trigger();
